@@ -1,0 +1,28 @@
+currently working on:
+-> COCKTAILS class, implementing it into the customer class --> continue
+-> Simulation does not properly work: if dt too big, cant simulate enough arrival times
+    --> simulate a fixed number of arrival times before hand (related to drinks per hour)?
+    --> or just use lots of clients and less drinks per hours
+-> add a .reset() to Simulation class to reset simulation and all processes
+
+
+
+model info:
+
+
+
+# PRICE_PROCESS
+-> ?Decrease price only if previous dt also didn't have any order?
+-> [tech] move drawing graph inside the class (now it's in the DRAW LOOP)
+-> add function to compute PROFIT (given unit cost) --> Added in the Commodity class
+
+
+# CUSTOMER
+---- customer order dynamics ----
+-> ?define utility function? 
+-> ?set limit over which not buying? (set alert for when price comes down)
+-> ?set instant buy when cheap? (add delay between buys)
+
+?INTERACTIVITY between CUSTOMERS and COMMODITY?
+
+

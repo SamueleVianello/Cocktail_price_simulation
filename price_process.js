@@ -93,6 +93,7 @@ class PriceProcess {
     this.box.w = w;
     this.box.h = h;
     this.box.dx = dx == 0 ? w / 30 : dx;
+    this.box.offset = 0.75; // where to start drawing the current candle
   }
 
   savePrice(timestamp) {
@@ -123,14 +124,21 @@ class PriceProcess {
   }
 
   drawFullGraph() {
-    this.drawCurrentPrice();
+    push();
+    rectMode(CORNER)
+    noFill();
+    stroke(0);
+    rect(this.box.x1, this.box.y1, this.box.w, this.box.h);
+    pop();
     this.drawHistory();
+    this.drawCurrentPrice();
+    
   }
 
   drawHistory() {
     let n_history = this.history.timestamp.length;
     for (let i = n_history - 1; i >= 0; i--) {
-      if (this.box.w * 0.5 - this.box.dx * (n_history - i) < this.box.x1) break;
+      if (this.box.w * this.box.offset - this.box.dx * (n_history - i) < this.box.x1) break;
       drawCandle(
         this.history.open[i],
         this.history.close[i],
@@ -138,9 +146,9 @@ class PriceProcess {
         this.history.maximum[i],
         this.min_price,
         this.max_price,
-        //this.box.x1 + this.box.w * 0.5 - this.box.dx * (n_history - i - 1),
+        //this.box.x1 + this.box.w * this.box.offset - this.box.dx * (n_history - i - 1),
         //this.box.dx / 2
-        this.box.x1 + this.box.w * 0.5 - this.box.dx * (n_history - i - 1),
+        this.box.x1 + this.box.w * this.box.offset - this.box.dx * (n_history - i - 1),
         this.box
       );
     }
@@ -154,34 +162,30 @@ class PriceProcess {
       this.current_price.maximum,
       this.min_price,
       this.max_price,
-      this.box.w * 0.5 + this.box.dx,
+      this.box.w * this.box.offset + this.box.dx,
       this.box
     );
 
     push();
-    noFill();
-    stroke(0);
-    rect(this.box.x1, this.box.y1, this.box.w, this.box.h);
-    pop();
+    translate(this.box.x1, this.box.y1);
 
-    push();
-    textSize(this.box.h * 0.08);
+    textSize(TEXT_SCALE *this.box.h * 0.08);
     text(
       this.current_price.close.toFixed(2),
       this.box.w * 0.5,
-      0.1 * this.box.h
+      0.1 * this.box.h*TEXT_SCALE
     );
 
-    textSize(this.box.h * 0.04);
-    text(this.asset_name, this.box.w * 0.5, 0.15 * this.box.h);
+    textSize(TEXT_SCALE*this.box.h * 0.04);
+    text(this.asset_name, this.box.w * 0.5, 0.15 * this.box.h*TEXT_SCALE);
     //textSize(height * 0.04);
     let tot_orders = this.history.vol.reduce(
       (partialSum, a) => partialSum + a,
       0
     );
     tot_orders += this.current_price.vol;
-    textSize(this.box.h * 0.03);
-    text("tot orders: " + tot_orders, this.box.w * 0.5, 0.18 * this.box.h);
+    textSize(TEXT_SCALE*this.box.h * 0.03);
+    text("tot orders: " + tot_orders, this.box.w * 0.5, 0.18 * this.box.h*TEXT_SCALE);
     pop();
   }
 }
@@ -232,6 +236,7 @@ function drawCandle(
   let c = my_green;
   if (curr_close < curr_open) c = my_red;
   push();
+  translate(box.x1, box.y1);
   stroke(c);
   strokeWeight((3 / 500) * box.w);
   line(center_x, candle_bottom_y, center_x, candle_top_y);

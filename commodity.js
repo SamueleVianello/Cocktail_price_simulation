@@ -47,11 +47,11 @@ class Commodity {
 
     if (show) {
       push();
-      textSize(this.price_process.box.h * 0.03);
+      textSize(this.price_process.box.h * 0.03*TEXT_SCALE);
       text(
         "Profit: " + net.toFixed(2),
         this.price_process.box.x1 + this.price_process.box.w * 0.5,
-        this.price_process.box.y1 + 0.21 * this.price_process.box.h
+        this.price_process.box.y1 + 0.21 * this.price_process.box.h*TEXT_SCALE
       );
       //text("Tot cost:" + tot_cost, width * 0.5, 0.25 * height);
       //text("Tot profit:" + tot_profit, width * 0.5, 0.28 * height);

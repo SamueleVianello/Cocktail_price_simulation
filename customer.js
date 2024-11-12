@@ -9,7 +9,6 @@ class Customer {
 
     for (let i = 0; i < GLOBAL_COCKTAILS.length; i++) {
       //console.log(drink_id, i, GLOBAL_COCKTAILS[i].id);
-      console.log(i);
       if (this.drink_id == GLOBAL_COCKTAILS[i].id) {
         this.cocktail = GLOBAL_COCKTAILS[i];
       }

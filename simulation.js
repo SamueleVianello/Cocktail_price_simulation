@@ -17,12 +17,12 @@ class Simulation {
     this.dt = dt;
     this.interval_time = interval_time;
     this.customers = [];
-    this.assets = [];
+    this.commodities = [];
     this.drinks = [];
     this.prices = [];
   }
 
-  /* // CAPIRE PERCHE' NON VA
+  /* // CAPIRE PERCHE' NON VA --> serve una variabile globale per salvare il customer
   addCustomer() {
     //let new_customer = ;
     this.customers.push(new Customer(2, "gin", this.dt));
@@ -36,10 +36,10 @@ class Simulation {
     // TODO: vedere se serve aggiornare altro del customer
   }
 
-  addAsset(asset) {
-    asset.current_order.timestamp = this.global_time;
-    this.assets.push(asset);
-    // TODO: vedere se serve aggiornare altro dell'asset
+  addCommodity(commodity) {
+    commodity.current_order.timestamp = this.global_time;
+    this.commodities.push(commodity);
+    // TODO: vedere se serve aggiornare altro della commodity
   }
 
   addPriceProcess(prc) {
@@ -56,26 +56,35 @@ class Simulation {
     }
   }
 
+  // TODO: creare funzione in sim per disegnare tutti i grafici
+  drawGraphs(xmin=0, ymin=0, xmax=width, ymax=height){
+
+  }
+
   evolve() {
     this.global_time += this.dt;
 
     // UPDATE ALL CUSTOMERS
-    for (let c of this.customers) {
-      c.checkOrders();
+    for (let cust of this.customers) {
+      cust.checkOrders();
 
       // add order to relevant commodity when needed
-      if (c.add_drink) {
-        for (let a of this.assets) {
-          if (a.id == c.drink_id) {
-            a.addOrder(c.add_drink);
+      if (cust.add_drink) {
+        // cycle through all possible alcoholic bases of the cocktail
+        for(let b of cust.cocktail.bases){
+          for (let c of this.commodities) {
+            if (c.id == b.id) {
+              c.addOrder(cust.add_drink * b.quantity / UNIT_OF_COCKTAIL_BASE);
+            }
           }
         }
+        
       }
-      //console.log(c.poisson.current.value);
+      //console.log(cust.poisson.current.value);
     }
 
     // UPDATE ALL PRICES
-    for (let c of this.assets) {
+    for (let c of this.commodities) {
       //c.addOrder(floor(random(0, 2)));
       c.updatePrice();
       c.saveHistory(this.global_time);
@@ -90,7 +99,7 @@ class Simulation {
     );
     if (current_interval > prev_interval) {
       // UPDATE ALL PRICES HISTORY
-      for (let c of this.assets) {
+      for (let c of this.commodities) {
         c.price_process.savePrice(this.global_time);
       }
     }

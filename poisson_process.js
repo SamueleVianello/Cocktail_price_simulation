@@ -4,6 +4,7 @@ function randomExp(lambda) {
 }
 
 class PoissonProcess {
+  // used to simulate the time of arrival of customers' orders
   constructor(lambda, dt) {
     this.lambda = lambda;
     this.dt = dt; //simulation interval
@@ -36,17 +37,21 @@ class PoissonProcess {
     this.updatePoissonValue();
     this.current.inter_value = this.current.value - this.current.prev_value;
 
-    console.log(this.current.inter_value);
+    //console.log(this.current);
   }
 
   updatePoissonValue() {
     let count = 0;
     let t = this.current.timestamp;
     for (let tau of this.history.total_arrival_time) {
-      count += t > tau ? 1 : 0;
+      if (tau>0) {
+        let adding = (t > tau) ? 1 : 0;
+        //console.log(adding)
+        count += adding;
+      }
       if (tau > t) break;
     }
-    count += t > this.current.total_arrival_time ? 1 : 0;
+    count += (t > this.current.total_arrival_time) ? 1 : 0;
     this.current.value = count;
   }
 

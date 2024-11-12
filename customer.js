@@ -20,7 +20,6 @@ class Customer {
 
   checkOrders() {
     this.poisson.advance();
-    // TODO: if this.poisson.current.inter_value =1 ---> add order to associated drink
     this.add_drink = this.poisson.current.inter_value;
     this.total_drinks = this.poisson.current.value;
 

@@ -56,7 +56,7 @@ let cocktails = [
     bases: [
       {
         id: "gin",
-        quantity: 1, //cl
+        quantity: 5, //cl
       },
     ],
     other: [
@@ -74,7 +74,7 @@ let cocktails = [
     bases: [
       {
         id: "vodka",
-        quantity: 1, // cl
+        quantity: 5, // cl
       },
     ],
     other: [

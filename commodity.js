@@ -3,14 +3,15 @@ function dot(v, w) {
 }
 
 class Commodity {
-  constructor(id, name, min_price, max_price, start_price, dt, cost = 0) {
+  constructor(id, name, min_price, max_price, start_price, cost = 0, dt=10 ) {
     this.id = id;
     this.name = name;
     this.min_price = min_price;
     this.max_price = max_price;
     this.start_price = start_price;
-    this.dt = dt;
     this.cost = cost;
+    this.dt = dt;
+
     this.price_process = new PriceProcess(
       id,
       name,
@@ -64,6 +65,11 @@ class Commodity {
   addOrder(qty) {
     this.current_order.vol += qty;
     //console.log("Added ", qty);
+  }
+
+  updateDt(delta){
+    this.dt = delta;
+    this.price_process.dt = delta;
   }
 
   updatePrice() {

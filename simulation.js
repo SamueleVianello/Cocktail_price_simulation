@@ -38,6 +38,7 @@ class Simulation {
 
   addCommodity(commodity) {
     commodity.current_order.timestamp = this.global_time;
+    commodity.updateDt(this.dt);
     this.commodities.push(commodity);
     // TODO: vedere se serve aggiornare altro della commodity
   }
@@ -48,6 +49,21 @@ class Simulation {
 
     // TODO: vedere se serve aggiornare altro del price
   }
+
+  /*
+  resetAndAddEverything(){
+    this.customers.length = 0;
+    for(let c of GLOBAL_CUSTOMERS){
+      this.customers.push(c);
+    }
+
+    this.commodities.length = 0;
+    for(let c of GLOBAL_COMMODITIES){
+      this.commodities.push(c);
+    }
+
+  }
+    */
 
   logPrices() {
     for (let p of this.prices) {
@@ -63,6 +79,9 @@ class Simulation {
 
   evolve() {
     this.global_time += this.dt;
+
+    let other_profit = 0;
+    let base_profit = 0;
 
     // UPDATE ALL CUSTOMERS
     for (let cust of this.customers) {
@@ -80,6 +99,7 @@ class Simulation {
         }
         
       }
+      other_profit += cust.total_drinks * cust.cocktail.other.reduce((acc, x) => acc + (x.price-x.cost), 0);
       //console.log(cust.poisson.current.value);
     }
 
@@ -88,7 +108,7 @@ class Simulation {
       //c.addOrder(floor(random(0, 2)));
       c.updatePrice();
       c.saveHistory(this.global_time);
-      c.getProfit();
+      base_profit+=c.getProfit(SHOW_PROFIT);
       //console.log("PROFIT:", c.getProfit());
     }
 
@@ -104,10 +124,17 @@ class Simulation {
       }
     }
 
+    // show clock
     let time_str = toHHMMSS(this.global_time);
     push();
     textSize(height * 0.08);
-    text(time_str, width * 0.5, 0.9 * height);
+    text(time_str, width * 0.5, 0.88 * height);
+    pop();
+
+    // get total profit (alc. bases + other);
+    push();
+    textSize(height * 0.04);
+    text("Tot profit: " + (base_profit + other_profit).toFixed(2), width * 0.5, 0.94 * height);
     pop();
   }
 }

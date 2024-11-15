@@ -1,10 +1,8 @@
 currently working on:
--> COCKTAILS class, implementing it into the customer class --> continue
--> Simulation does not properly work: if dt too big, cant simulate enough arrival times
-    --> simulate a fixed number of arrival times before hand (related to drinks per hour)?
-    --> or just use lots of clients and less drinks per hours
+
 -> add a .reset() to Simulation class to reset simulation and all processes
 
+-> ?include unit of account into the Commodity class (and list)?
 
 
 model info:
@@ -25,4 +23,7 @@ model info:
 
 ?INTERACTIVITY between CUSTOMERS and COMMODITY?
 
-
+SIMULATION
+-> Simulation does not properly work: if dt too big, cant simulate enough arrival times
+    --> simulate a fixed number of arrival times before hand (related to drinks per hour)?
+    --> or just use lots of clients and less drinks per hours ^^^THIS^^^

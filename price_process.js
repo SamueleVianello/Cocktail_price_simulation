@@ -9,9 +9,9 @@ class PriceProcess {
   constructor(
     asset_id,
     asset_name,
-    initial_price,
     min_price,
     max_price,
+    initial_price,
     dt = 10
   ) {
     this.asset_id = asset_id;
@@ -45,9 +45,10 @@ class PriceProcess {
       w: width,
       h: height,
       dx: width / 30,
+      offset: 0.75
     };
 
-    console.log(this.box);
+    //console.log(this.box);
   }
 
   updatePrice(order_vol = 0) {
@@ -162,7 +163,7 @@ class PriceProcess {
       this.current_price.maximum,
       this.min_price,
       this.max_price,
-      this.box.w * this.box.offset + this.box.dx,
+      this.box.w * this.box.offset + this.box.dx, //center_x
       this.box
     );
 
@@ -232,6 +233,16 @@ function drawCandle(
     bound_bottom_y,
     bound_top_y
   );
+
+  /*
+  // DEBUG VALUES
+  console.log("curr_max",curr_max);
+  console.log("min_val",min_val);
+  console.log("max_val",max_val);
+  console.log("bound_bottom_y",bound_bottom_y);
+  console.log("bound_top_y",bound_top_y);
+  console.log("candle top y ", candle_top_y)
+  */
 
   let c = my_green;
   if (curr_close < curr_open) c = my_red;

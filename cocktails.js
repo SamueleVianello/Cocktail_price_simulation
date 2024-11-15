@@ -12,7 +12,7 @@ class Cocktail {
   importBases() {
     // look into all spirits and push them into this.base
     for (let i = 0; i < this.bases.length; i++) {
-      for (let sp of GLOBAL_SPIRITS) {
+      for (let sp of GLOBAL_COMMODITIES) {
         if (this.bases[i].id == sp.id) {
           this.bases[i].commodity = sp;
         }
@@ -39,62 +39,4 @@ class Cocktail {
   }
 }
 
-function importCocktails(ct) {
-  for (let c of ct) {
-    let temp = new Cocktail(c.id, c.name, c.bases, c.other);
-    //temp.importBases()
-    GLOBAL_COCKTAILS.push(temp);
-  }
-}
 
-// ##########################
-let cocktails = [
-  {
-    // GIN TONIC
-    id: "gintonic01",
-    name: "Gin Mare con Tonica",
-    bases: [
-      {
-        id: "gin",
-        quantity: 5, //cl
-      },
-    ],
-    other: [
-      {
-        name: "tonica",
-        price: 4,
-        quantity: 10, //cl
-      },
-    ],
-  },
-  {
-    // VODKA LEMON
-    id: "vodkalemon01",
-    name: "Vodka con Limonata",
-    bases: [
-      {
-        id: "vodka",
-        quantity: 5, // cl
-      },
-    ],
-    other: [
-      {
-        name: "limonata",
-        price: 4,
-        quantity: 10, //cl
-      },
-    ],
-  },
-  {
-    // BEER
-    id: "beer01",
-    name: "Birra",
-    bases: [
-      {
-        id: "birra",
-        quantity: 1,
-      },
-    ],
-    other: [],
-  },
-];

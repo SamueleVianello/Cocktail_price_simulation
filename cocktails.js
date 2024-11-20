@@ -21,6 +21,7 @@ class Cocktail {
   }
 
   getPrice(dt = 0) {
+    // dt is time in SECONDS
     if (dt <= 0) {
         // compute total price of other ingredients
       let other_price = this.other.reduce(
@@ -37,6 +38,7 @@ class Cocktail {
       
       //console.log("base price:",base_price)
       //console.log("other price:",other_price)
+      if (base_price<0) {return 0}
 
       return base_price+other_price;
     }

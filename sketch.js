@@ -66,6 +66,8 @@ function setup() {
   //GLOBAL_COCKTAILS[2].importBases()
   console.log(GLOBAL_COCKTAILS[2])
   GLOBAL_COCKTAILS[2].getPrice()
+
+  showMenu(0.75*width, 0, width, 0.8*height)
 }
 
 
@@ -81,10 +83,14 @@ function draw() {
   //GLOBAL_COMMODITIES[0].price_process.drawFullGraph();
   //GLOBAL_COMMODITIES[1].price_process.drawFullGraph();
   sim.evolve();
+  showMenu(0.75*width, 0, width, 0.8*height)
+
 
   //console.log(GLOBAL_COMMODITIES[0])
   //console.log(GLOBAL_COMMODITIES[1])
   if (frameCount == 180 + 0*hours_to_simulate* (60 / dt) * 60) {
     noLoop();
+    console.log(GLOBAL_COCKTAILS[2].getPrice(-30*60));
   }
+
 }

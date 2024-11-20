@@ -2,7 +2,7 @@ let cocktails = [
     {
       // GIN TONIC ---------------------------------
       id: "gintonic01",
-      name: "Gin Mare con Tonica",
+      name: "GinTonic",
       bases: [
         {
           id: "gin",
@@ -21,7 +21,7 @@ let cocktails = [
     {
       // VODKA LEMON ---------------------------------
       id: "vodkalemon01",
-      name: "Vodka con Limonata",
+      name: "VodkaLemon",
       bases: [
         {
           id: "vodka",
@@ -63,7 +63,7 @@ let cocktails = [
     {
       // BEER ---------------------------------
       id: "beer01",
-      name: "Birra",
+      name: "Birra Chiara",
       bases: [
         {
           id: "birra",

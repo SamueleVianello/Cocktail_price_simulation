@@ -35,9 +35,32 @@ class Commodity {
   }
 
   getPrice(delta_t) {
-    // delta_t = how far back to go in seconds
-    let idx = floor(delta_t/this.dt)
-    return this.current_order.price;
+    // delta_t = how far back to go in SECONDS
+    if (delta_t == 0) return this.current_order.price;
+    else {
+      let time = this.current_order.timestamp + delta_t;
+      let price = -99;
+
+      // look for timestamp in order history
+      let found = false;
+      let i =0;
+      let len = this.order_history.timestamp.length;
+      while(!found && i<len){
+        i++;
+        if (Math.abs(this.order_history.timestamp[len-i]-time) < this.dt){
+          found = true;
+          price = this.order_history.price[len-i];
+        }
+        
+      }
+
+      // -- DEBUGGING
+      //console.log("timestamp",toHHMMSS(this.order_history.timestamp[len-i]))
+      //console.log("price",this.order_history.price[len-i])
+      //console.log("vol",this.order_history.vol[len-i])
+      return price;
+    }
+    
   }
 
   getProfit(show = true) {

@@ -139,7 +139,13 @@ class PriceProcess {
   drawHistory() {
     let n_history = this.history.timestamp.length;
     for (let i = n_history - 1; i >= 0; i--) {
-      if (this.box.w * this.box.offset - this.box.dx * (n_history - i) < this.box.x1) break;
+      if ((this.box.w * this.box.offset - this.box.dx * (n_history - i)) < 0) 
+        {
+          console.log("breaking at ",i)
+          break;
+        }
+      let center_x = this.box.w * this.box.offset - this.box.dx * (n_history - i - 1);
+
       drawCandle(
         this.history.open[i],
         this.history.close[i],
@@ -149,7 +155,7 @@ class PriceProcess {
         this.max_price,
         //this.box.x1 + this.box.w * this.box.offset - this.box.dx * (n_history - i - 1),
         //this.box.dx / 2
-        this.box.x1 + this.box.w * this.box.offset - this.box.dx * (n_history - i - 1),
+        center_x,
         this.box
       );
     }
@@ -244,20 +250,28 @@ function drawCandle(
   console.log("candle top y ", candle_top_y)
   */
 
-  let c = my_green;
-  if (curr_close < curr_open) c = my_red;
+  let c = (curr_close >= curr_open)? my_green: my_red;
   push();
   translate(box.x1, box.y1);
   stroke(c);
   strokeWeight((3 / 500) * box.w);
   line(center_x, candle_bottom_y, center_x, candle_top_y);
   fill(c);
-  noStroke();
+  noStroke()
   rect(
     center_x - 0.5 * box.dx * 0.5,
     rect_bottom_y,
     center_x + 0.5 * box.dx * 0.5,
     rect_top_y
   );
+  if(abs(rect_top_y-rect_bottom_y)<=1 ){
+    stroke(c);
+    line(
+      center_x - 0.5 * box.dx * 0.5,
+      rect_bottom_y,
+      center_x + 0.5 * box.dx * 0.5,
+      rect_top_y
+    )
+  }
   pop();
 }

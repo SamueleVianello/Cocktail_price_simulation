@@ -1,7 +1,6 @@
 let GLOBAL_COMMODITIES = [];
 let GLOBAL_COCKTAILS = [];
 let GLOBAL_CUSTOMERS = [];
-let UNIT_OF_COCKTAIL_BASE = 5; // one unit is 5cl
 let TEXT_SCALE = 2;
 let SHOW_PROFIT = true;
 
@@ -14,7 +13,7 @@ let gin_cost = 4;
 
 let increase_perc = 0.04; // 0.01 = 1% increase per SINGLE ORDER
 let required_orders = 1; // needed orders to increase
-let decrease_perc = -0.01; // -0.01 = 1% decrease per MINUTE
+let decrease_perc = -0.005; // -0.01 = 1% decrease per MINUTE
 let orders_per_hour = 30; //total orders in the bar per hour
 let N_customers = 20;
 
@@ -76,9 +75,12 @@ function draw() {
   //noLoop();
   background(220);
 
+  
   for(let c of GLOBAL_COMMODITIES){
     c.price_process.drawFullGraph();
   }
+  
+  
 
   //GLOBAL_COMMODITIES[0].price_process.drawFullGraph();
   //GLOBAL_COMMODITIES[1].price_process.drawFullGraph();
@@ -90,7 +92,6 @@ function draw() {
   //console.log(GLOBAL_COMMODITIES[1])
   if (frameCount == 180 + 0*hours_to_simulate* (60 / dt) * 60) {
     noLoop();
-    console.log(GLOBAL_COCKTAILS[2].getPrice(-30*60));
   }
 
 }

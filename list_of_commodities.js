@@ -6,6 +6,7 @@ let commodities = [
         max_price : 8,
         start_price : 5,
         cost : 3,
+        price_unit: 5, // in cl
     },
     {   // VODKA GREY GOOSE
         id : 'vodka',
@@ -14,6 +15,7 @@ let commodities = [
         max_price : 9,
         start_price : 6,
         cost : 4.5,
+        price_unit: 5, // in cl
     },
     {   // BIRRA LEFFE
         id : 'birra',
@@ -22,6 +24,7 @@ let commodities = [
         max_price : 8.5,
         start_price : 5.5,
         cost : 2.5,
+        price_unit: 50, // in cl
     },
 
 ];

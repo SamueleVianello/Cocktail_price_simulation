@@ -40,18 +40,18 @@ function setup() {
   sim = new Simulation(dt, interval_time); //time in seconds
   sim.global_time = 21 * 60 * 60; // opening hour in seconds
 
-  // import coctails from list_of_cocktails.js
-  importCocktails(cocktails);
-
   // import commodities (= alcohol bases) from list_of_commodities.js and add them to simulation
   importCommodities(commodities, sim);
 
+  // import coctails from list_of_cocktails.js
+  importCocktails(cocktails);
+
+  
+
   // create all customers and import them
   for (let i = 0; i < N_customers; i++) {
-    //let fav_cocktail = Math.random()>0.5 ? "gintonic01" : "vodkalemon01";
-
     let fav_cocktail = sampleElement(GLOBAL_COCKTAILS.map(obj => obj.id));
-    console.log(fav_cocktail)
+    //console.log(fav_cocktail)
     GLOBAL_CUSTOMERS.push(
       new Customer(orders_per_hour / N_customers, fav_cocktail, sim.dt)
     );
@@ -59,12 +59,13 @@ function setup() {
   }
 
   //sim.resetAndAddEverything();
-
   for(let c of GLOBAL_COMMODITIES){
     console.log(c)
   }
 
-  
+  //GLOBAL_COCKTAILS[2].importBases()
+  console.log(GLOBAL_COCKTAILS[2])
+  GLOBAL_COCKTAILS[2].getPrice()
 }
 
 

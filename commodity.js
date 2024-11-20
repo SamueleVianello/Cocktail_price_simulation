@@ -3,12 +3,13 @@ function dot(v, w) {
 }
 
 class Commodity {
-  constructor(id, name, min_price, max_price, start_price, cost = 0, dt=10 ) {
+  constructor(id, name, min_price, max_price, start_price, unit, cost = 0, dt=10 ) {
     this.id = id;
     this.name = name;
     this.min_price = min_price;
     this.max_price = max_price;
     this.start_price = start_price;
+    this.price_unit = unit;
     this.cost = cost;
     this.dt = dt;
 
@@ -33,7 +34,9 @@ class Commodity {
     };
   }
 
-  getPrice() {
+  getPrice(delta_t) {
+    // delta_t = how far back to go in seconds
+    let idx = floor(delta_t/this.dt)
     return this.current_order.price;
   }
 

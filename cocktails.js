@@ -6,7 +6,7 @@ class Cocktail {
     this.bases = bases;
     this.other = other;
     //this.fixed_costs;
-    this.importBases();
+    //this.importBases();
   }
 
   importBases() {
@@ -20,22 +20,29 @@ class Cocktail {
     }
   }
 
-  getPrice() {
-    // sum of the other ingredients price
-    let tot_price = this.other.reduce(
-      (partialSum, a) => partialSum + a.price,
-      0
-    );
+  getPrice(dt = 0) {
+    if (dt <= 0) {
+        // compute total price of other ingredients
+      let other_price = this.other.reduce(
+        (partialSum, a) => partialSum + a.price,
+        0
+      );
 
-    /*
-    // add bases price --> MULTIPLY BY QUANTITY
-    tot_price += this.base.reduce(
-      (partialSum, b) => partialSum + b.getPrice(),
-      0
-    );
-    */
+      
+      // compute total price of alcohol base ingredients
+      let base_price = this.bases.reduce(
+        (partialSum, b) => partialSum +b.quantity * b.commodity.getPrice(dt)/b.commodity.price_unit,
+        0
+      );
+      
+      //console.log("base price:",base_price)
+      //console.log("other price:",other_price)
 
-    return tot_price;
+      return base_price+other_price;
+    }
+    else{
+      console.log("ERROR: can't predict future price!");
+    }
   }
 }
 

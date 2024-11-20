@@ -93,7 +93,7 @@ class Simulation {
         for(let b of cust.cocktail.bases){
           for (let c of this.commodities) {
             if (c.id == b.id) {
-              c.addOrder(cust.add_drink * b.quantity / UNIT_OF_COCKTAIL_BASE);
+              c.addOrder(cust.add_drink * b.quantity / c.price_unit);
             }
           }
         }

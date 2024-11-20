@@ -2,6 +2,7 @@ function importCocktails(ct) {
     for (let c of ct) {
       let temp = new Cocktail(c.id, c.name, c.bases, c.other);
       //temp.importBases()
+      temp.importBases();
       GLOBAL_COCKTAILS.push(temp);
     }
 }
@@ -11,7 +12,7 @@ function importCocktails(ct) {
 function importCommodities(comm, s) {
   for(let i=0;i<comm.length;i++  ){
     let c = comm[i];
-    GLOBAL_COMMODITIES.push(new Commodity(c.id, c.name, c.min_price, c.max_price, c.start_price, c.cost))
+    GLOBAL_COMMODITIES.push(new Commodity(c.id, c.name, c.min_price, c.max_price, c.start_price, c.price_unit, c.cost))
     s.addCommodity(GLOBAL_COMMODITIES[i]);
     GLOBAL_COMMODITIES[i].price_process.setBox(0, i/comm.length*height * 0.8, width, height * 0.8 /comm.length);
   }
@@ -20,4 +21,9 @@ function importCommodities(comm, s) {
 
 function sampleElement(array) {
   return array[Math.floor(Math.random() * array.length)];
+}
+
+
+function showMenu(x1,y1,x2,y2){
+
 }

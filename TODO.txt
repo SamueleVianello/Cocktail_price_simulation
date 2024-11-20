@@ -2,7 +2,9 @@ currently working on:
 
 -> add a .reset() to Simulation class to reset simulation and all processes
 
--> ?include unit of account into the Commodity class (and list)?
+------> include unit of account into the Commodity class (and list)? <------------
+
+--> Add visualization of cocktail menu price to simulation
 
 
 model info:

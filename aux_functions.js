@@ -48,16 +48,25 @@ function showMenu(x1,y1,x2,y2){
   fill(0);
   noStroke();
 
-   
+
+  textAlign(LEFT);
+  text('COCKTAIL', dh+x1, 2*dh )
+  textAlign(CENTER);
+  text('         CURRENT', 0.5*(x1+x2), 2*dh)
+  textAlign(RIGHT);
+  text('PAST', x2-dh,2*dh)
 
   for(let i=0; i< n_cocktails; i++){
     let curr_price = GLOBAL_COCKTAILS[i].getPrice().toFixed(2);
     let past_price = GLOBAL_COCKTAILS[i].getPrice(-15*60).toFixed(2);
     let arrow = curr_price>past_price ? "⇧" : "⇩";
-    text(GLOBAL_COCKTAILS[i].name +"\t\t"+ curr_price + " "+arrow+" "
-          +"\t\t"+ past_price,
-        dh+x1, 2*dh+i*1.5*dh 
-    )
+
+    textAlign(LEFT);
+    text(GLOBAL_COCKTAILS[i].name, dh+x1, 4*dh+i*1.5*dh ) //name
+    textAlign(CENTER);
+    text('         '+curr_price + " "+arrow, 0.5*(x1+x2), 4*dh+i*1.5*dh) //current price
+    textAlign(RIGHT);
+    text(past_price, x2-dh,4*dh+i*1.5*dh) // past price
   }
 
   pop();

@@ -19,7 +19,7 @@ let N_customers = 20;
 
 let dt = 20; // seconds between every price update
 let interval_time = 5 * 60; // seconds between every CANDLE update
-let hours_to_simulate = 2;
+let hours_to_simulate = 5;
 // ------------------------------------------------
 
 let sim;
@@ -90,7 +90,7 @@ function draw() {
 
   //console.log(GLOBAL_COMMODITIES[0])
   //console.log(GLOBAL_COMMODITIES[1])
-  if (frameCount == 180 + 0*hours_to_simulate* (60 / dt) * 60) {
+  if (frameCount ==  hours_to_simulate* (60 / dt) * 60) {
     noLoop();
   }
 

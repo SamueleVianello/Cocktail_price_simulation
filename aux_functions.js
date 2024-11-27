@@ -36,7 +36,7 @@ function sampleElement(array) {
 function showMenu(x1,y1,x2,y2){
   push();
   rectMode(CORNERS);
-  fill(250,120,50);
+  //fill(250,120,50);
   stroke(0)
   rect(x1,y1,x2,y2)
   let n_cocktails = GLOBAL_COCKTAILS.length;
@@ -60,13 +60,19 @@ function showMenu(x1,y1,x2,y2){
     let curr_price = GLOBAL_COCKTAILS[i].getPrice().toFixed(2);
     let past_price = GLOBAL_COCKTAILS[i].getPrice(-15*60).toFixed(2);
     let arrow = curr_price>past_price ? "⇧" : "⇩";
+    let perc = ((curr_price/past_price -1)*100).toFixed(2);
 
+    perc = (past_price ==0)? "-": perc+'%';
+
+    fill(0)
     textAlign(LEFT);
     text(GLOBAL_COCKTAILS[i].name, dh+x1, 4*dh+i*1.5*dh ) //name
     textAlign(CENTER);
     text('         '+curr_price + " "+arrow, 0.5*(x1+x2), 4*dh+i*1.5*dh) //current price
+
+    fill(curr_price<past_price ? '#0011bb':my_red);
     textAlign(RIGHT);
-    text(past_price, x2-dh,4*dh+i*1.5*dh) // past price
+    text(perc, x2-dh,4*dh+i*1.5*dh) // past price
   }
 
   pop();

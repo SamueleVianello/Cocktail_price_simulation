@@ -1,20 +1,10 @@
 currently working on:
 
+Price change(%) instead of past price
+
+
 -> add a .reset() to Simulation class to reset simulation and all processes
 
-------> include unit of account into the Commodity class (and list)? <------------
-
---> Add visualization of cocktail menu price to simulation
-
-
-model info:
-
-
-
-# PRICE_PROCESS
--> ?Decrease price only if previous dt also didn't have any order?
--> [tech] move drawing graph inside the class (now it's in the DRAW LOOP)
--> add function to compute PROFIT (given unit cost) --> Added in the Commodity class
 
 
 # CUSTOMER

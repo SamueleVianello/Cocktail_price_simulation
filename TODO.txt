@@ -1,10 +1,5 @@
 currently working on:
 
-Price change(%) instead of past price
-
-
--> add a .reset() to Simulation class to reset simulation and all processes
-
 
 
 # CUSTOMER
@@ -19,3 +14,34 @@ SIMULATION
 -> Simulation does not properly work: if dt too big, cant simulate enough arrival times
     --> simulate a fixed number of arrival times before hand (related to drinks per hour)?
     --> or just use lots of clients and less drinks per hours ^^^THIS^^^
+
+
+######### crypto vodkoin indicizzato ai prezzi degli asset quotati
+######### --> se sale, lo usi come "mezzo di pagamento" 
+######### --> puoi comprare nft generativi
+
+OPZIONI:
+(futuro riscatto automatico, ora CASSA, su tutti i cocktail)
+-prezzo fisso ad es. 1€
+-strike al prezzo spot
+-orari fissi (tolleranza 15 minuti) xx:00-xx:15
+-lotto/nozionale 1pz/3pz/5pz
+
+SWAP drink
+--scambia il drink con un altro
+
+PERPERTUAL 
+--ottieni gettone per redimerlo sempre
+--lo paghi tipo 1€
+
+######### EVENTI ################
+
+FLASH CRASH & FOMO
+HAPPY HOUR VOLATILE (periodo in cui i salti sono 5x il normale)
+
+IPO nuovo drink sbloccato
+
+#################################
+
+
+-> add a .reset() to Simulation class to reset simulation and all processes

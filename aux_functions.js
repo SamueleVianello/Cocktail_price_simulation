@@ -18,9 +18,9 @@ function importCommodities(comm, s) {
     //GLOBAL_COMMODITIES[i].price_process.setBox(20, i/comm.length*height * 0.8, 0.75*width, height * 0.8 /comm.length);
 
     let n_vert = (floor(comm.length/2+0.8));
-    let w = width*0.75*0.5;
+    let w = width*0.55*0.5;
     let h = height*0.8 / n_vert;
-    let x1 = (i<comm.length/2)? 0: width*0.75*0.5;
+    let x1 = (i<comm.length/2)? 0.2*width: w + 0.2*width;
     let y1 = h*((i)%n_vert);
     GLOBAL_COMMODITIES[i].price_process.setBox(x1,y1,w,h);
 
@@ -68,11 +68,11 @@ function showMenu(x1,y1,x2,y2){
     textAlign(LEFT);
     text(GLOBAL_COCKTAILS[i].name, dh+x1, 4*dh+i*1.5*dh ) //name
     textAlign(CENTER);
-    text('         '+curr_price + " "+arrow, 0.5*(x1+x2), 4*dh+i*1.5*dh) //current price
+    text('         '+curr_price, 0.5*(x1+x2), 4*dh+i*1.5*dh) //current price
 
     fill(curr_price<past_price ? '#0011bb':my_red);
     textAlign(RIGHT);
-    text(perc, x2-dh,4*dh+i*1.5*dh) // past price
+    text(arrow+perc, x2-dh,4*dh+i*1.5*dh) // past price
   }
 
   pop();

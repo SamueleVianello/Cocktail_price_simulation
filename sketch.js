@@ -29,8 +29,12 @@ let cust1, cust2;
 
 let drink1;
 
+let entry_test;
+let register_test;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
   rectMode(CORNERS);
   textAlign(CENTER);
   frameRate(30);
@@ -66,7 +70,12 @@ function setup() {
   console.log(GLOBAL_COCKTAILS[2])
   GLOBAL_COCKTAILS[2].getPrice()
 
-  showMenu(0.75*width, 0, width, 0.8*height)
+  showMenu(0.8*width, 0, width, 0.8*height)
+
+
+  register_test = new Register(0, 0.*windowHeight, windowWidth*0.19, windowHeight);
+  register_test.create();
+
 }
 
 
@@ -74,7 +83,6 @@ function setup() {
 function draw() {
   //noLoop();
   background(220);
-
   
   for(let c of GLOBAL_COMMODITIES){
     c.price_process.drawFullGraph();

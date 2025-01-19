@@ -141,7 +141,7 @@ class PriceProcess {
     for (let i = n_history - 1; i >= 0; i--) {
       if ((this.box.w * this.box.offset - this.box.dx * (n_history - i)) < 0) 
         {
-          console.log("breaking at ",i)
+          //console.log("breaking at ",i)
           break;
         }
       let center_x = this.box.w * this.box.offset - this.box.dx * (n_history - i - 1);

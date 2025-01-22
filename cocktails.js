@@ -46,6 +46,8 @@ class Cocktail {
       console.log("ERROR: can't predict future price!");
     }
   }
+
+
 }
 
 

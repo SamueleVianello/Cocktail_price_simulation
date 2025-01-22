@@ -31,7 +31,7 @@ class Register {
     applyStyles() {
       this.container.style('background-color', '#ffffff');
       this.container.style('padding', '10px');
-      this.container.style('border-radius', '8px');
+      this.container.style('border-radius', '4px');
       this.container.style('box-shadow', '0 2px 4px rgba(0,0,0,0.1)');
       this.container.style('display', 'flex');
       this.container.style('flex-direction', 'column');
@@ -47,12 +47,13 @@ class Register {
     }
   
     create() {
-      // Create entries for each cocktail
+      // Create entries for each GLOBAL_COCKTAILS
       let n = GLOBAL_COCKTAILS.length;
       
       for (let i = 0; i < n; i++) {
         let entry = new RegisterEntry(
           GLOBAL_COCKTAILS[i].name,
+          GLOBAL_COCKTAILS[i].id,
           this.w - this.spacing * 2,
           this.entryHeight,
           this.entriesContainer
@@ -98,31 +99,75 @@ class Register {
     sendOrder() {
       let order = {
         timestamp: new Date().toISOString(),
-        items: this.getOrderSummary()
+        items: this.getOrder()
       };
       console.log('Order placed:', order);
+      this.parseOrder(order);
       this.resetAll();
     }
+
+    getOrder() {
+        return this.entries
+          .map((entry, index) => ({
+            name: GLOBAL_COCKTAILS[index].name,
+            id: GLOBAL_COCKTAILS[index].id,
+            quantity: entry.getAmount(),
+            unit_price: GLOBAL_COCKTAILS[index].getPrice(),
+            total_price: entry.getAmount() *GLOBAL_COCKTAILS[index].getPrice(),
+            // cocktail: GLOBAL_COCKTAILS[index],
+          }))
+          .filter(item => item.quantity > 0);
+    }
   
+    /* //Add export to json or csv
     getOrderSummary() {
       return this.entries
         .map((entry, index) => ({
           name: GLOBAL_COCKTAILS[index].name,
+          id: GLOBAL_COCKTAILS[index].id,
           quantity: entry.getAmount()
         }))
         .filter(item => item.quantity > 0);
     }
+        */
 
 
     parseOrder(ord){
+        let n_ord = ord.items.length;
+        for( let i=0; i<n_ord; i++){
+            let single_ord;
+            let qty_ord = ord.items[i].quantity;
+
+            // find associated cocktail
+            for (let ckt of GLOBAL_COCKTAILS){
+                if(ckt.id == ord.items[i].id){
+                    single_ord = ckt;
+                }
+            }
+
+            // add relevant amount order to each of the bases of the cocktail
+            for(let b of single_ord.bases){
+                for (let c of GLOBAL_COMMODITIES) {
+                  if (c.id == b.id) {
+                    c.addOrder(qty_ord * b.quantity / c.price_unit);
+                  }
+                }
+            }
+        }
+        
+    }
+
+    printOrder(ord){
+
 
     }
   }
 
 
 class RegisterEntry {
-    constructor(label, w, h, parentElement) {
+    constructor(label, id, w, h, parentElement) {
       this.order_amount = 0;
+      this.id = id;
   
       // Create container div and add it to the parent
       this.container = createDiv('');
@@ -140,7 +185,7 @@ class RegisterEntry {
       // Create remove button
       this.remove_button = createButton('-');
       this.remove_button.parent(this.container);
-      this.remove_button.size(w * 0.15, h);
+      this.remove_button.size(w * 0.1, h);
       this.remove_button.mousePressed(() => this.removeOrder());
       
       // Create input field
@@ -153,7 +198,7 @@ class RegisterEntry {
       // Create add button
       this.add_button = createButton('+');
       this.add_button.parent(this.container);
-      this.add_button.size(w * 0.15, h);
+      this.add_button.size(w * 0.1, h);
       this.add_button.mousePressed(() => this.addOrder());
   
       this.applyStyles();

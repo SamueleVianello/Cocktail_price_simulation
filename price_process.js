@@ -18,14 +18,15 @@ class PriceProcess {
     this.asset_name = asset_name;
     this.min_price = min_price;
     this.max_price = max_price;
-    this.dt = dt;
-    this.history = {
+    this.dt = dt; // in seconds, used to compute the price update
+    this.history = { //history of price candles data and volumes
       timestamp: [],
       open: [],
       close: [],
       maximum: [],
       minimum: [],
       vol: [],
+      asset_id: []
     };
     this.current_price = {
       timestamp: 0,
@@ -104,6 +105,7 @@ class PriceProcess {
     this.history.maximum.push(this.current_price.maximum);
     this.history.minimum.push(this.current_price.minimum);
     this.history.vol.push(this.current_price.vol);
+    this.history.id.push(this.asset_id);
 
     this.current_price.timestamp = timestamp;
     this.current_price.open = this.current_price.close;

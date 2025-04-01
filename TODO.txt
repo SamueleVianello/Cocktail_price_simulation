@@ -1,6 +1,22 @@
 currently working on:
 
 
+######### EVENTI ################
+
+# CROLLO DI MERCATO:
+---> se per tot minuti (30m) nessun ordine, crash di mercato: SCENDI a min_price+x%
+---> bottone rosso
+---> ulteriori condizioni da implementare 
+
+
+# HAPPY HOUR VOLATILE (periodo in cui i salti sono 5x il normale)
+
+# IPO nuovo drink sbloccato
+---> salvare da parte ordini durante IPO e caricarli tutti insieme
+
+#################################
+
+
 
 # CUSTOMER
 ---- customer order dynamics ----
@@ -34,14 +50,6 @@ PERPERTUAL
 --ottieni gettone per redimerlo sempre
 --lo paghi tipo 1€
 
-######### EVENTI ################
-
-FLASH CRASH & FOMO
-HAPPY HOUR VOLATILE (periodo in cui i salti sono 5x il normale)
-
-IPO nuovo drink sbloccato
-
-#################################
 
 
 -> add a .reset() to Simulation class to reset simulation and all processes

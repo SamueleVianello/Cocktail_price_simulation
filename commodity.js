@@ -9,8 +9,8 @@ class Commodity {
     this.min_price = min_price;
     this.max_price = max_price;
     this.start_price = start_price;
-    this.price_unit = unit;
-    this.cost = cost;
+    this.price_unit = unit; //units used for the quoted price
+    this.cost = cost; //
     this.dt = dt;
 
     this.price_process = new PriceProcess(
@@ -24,17 +24,18 @@ class Commodity {
 
     this.order_history = {
       timestamp: [],
-      vol: [],
+      vol: [], //volume of orders
       price: [],
     };
     this.current_order = {
       timestamp: 0,
-      vol: 0,
+      vol: 0, //volume of order
       price: start_price,
     };
   }
 
   getPrice(delta_t) {
+    // get the price in the past saved in the history
     // delta_t = how far back to go in SECONDS
     if (delta_t == 0) return this.current_order.price;
     else {
@@ -93,11 +94,6 @@ class Commodity {
     //console.log("Added ", qty);
   }
 
-  updateDt(delta){
-    this.dt = delta;
-    this.price_process.dt = delta;
-  }
-
   updatePrice() {
     this.price_process.updatePrice(this.current_order.vol);
     this.current_order.price = this.price_process.current_price.close;
@@ -111,4 +107,13 @@ class Commodity {
     this.current_order.timestamp = time;
     this.current_order.vol = 0;
   }
+
+  updateDt(delta){
+    this.dt = delta;
+    this.price_process.dt = delta;
+  }
+
+  
+
+  
 }

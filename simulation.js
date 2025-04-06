@@ -1,4 +1,5 @@
 function toHHMMSS(s) {
+  // converts seconds into hh:mm:ss format string
   let neg_flag = s < 0;
   s = Math.abs(s);
   let h = Math.floor(s / 3600);

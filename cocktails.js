@@ -47,6 +47,14 @@ class Cocktail {
     }
   }
 
+  logDetails(){
+    console.log('-------- COCKTAIL LOG -----------')
+    console.log("Cocktail: ", this.id, this.name);
+    console.log("Bases: ", this.bases);
+    console.log("Other ingredients: ", this.other);
+    console.log('---------------------------------')
+  }
+
 
 }
 

@@ -114,6 +114,18 @@ class Commodity {
   }
 
   
-
+  logDetails(){
+    console.log('-------- COMMODITY LOG -----------')
+    console.log("ID", this.id);
+    console.log("Name", this.name);
+    console.log("Min price", this.min_price);
+    console.log("Max price", this.max_price);
+    console.log("Start price", this.start_price);
+    console.log("Price unit", this.price_unit);
+    console.log("Cost", this.cost);
+    console.log("dt", this.dt);
+    console.log("Current price", this.current_order.price);
+    //console.log("Order history", this.order_history);
+  }
   
 }

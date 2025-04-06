@@ -67,8 +67,8 @@ function setup() {
   }
 
   //GLOBAL_COCKTAILS[2].importBases()
-  console.log(GLOBAL_COCKTAILS[2])
-  GLOBAL_COCKTAILS[2].getPrice()
+  //console.log(GLOBAL_COCKTAILS[2])
+  //GLOBAL_COCKTAILS[2].getPrice()
 
   showMenu(0.8*width, 0, width, 0.8*height)
 
@@ -76,12 +76,20 @@ function setup() {
   register_test = new Register(0, 0.*windowHeight, windowWidth*0.19, windowHeight);
   register_test.create();
 
+  let eng = new Engine(sim.global_time);
+  eng.importCommodities(commodities)
+  //eng.logCommodityList();
+  eng.importCocktails(cocktails)
+  //eng.logCocktails();
+
+  eng.evolve()
+
 }
 
 
 
 function draw() {
-  //noLoop();
+  noLoop();
   background(220);
   
   for(let c of GLOBAL_COMMODITIES){

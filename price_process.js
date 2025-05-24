@@ -66,25 +66,34 @@ class PriceProcess {
 
     let decrease_factor = Math.pow(1 + decrease_perc, this.dt / 60);
 
+    // console.log(`Price update for ${this.asset_id}:`)
+    // console.log(`- Current price: ${this.current_price.close}`)
+    // console.log(`- Order volume: ${order_vol}`)
+    // console.log(`- Increase factor: ${increase_factor}`)
+    // console.log(`- Decrease factor: ${decrease_factor}`)
+    // console.log(`- increase_perc: ${increase_perc}`)
+    // console.log(`- decrease_perc: ${decrease_perc}`)
+    // console.log(`- required_orders: ${required_orders}`)
+
     if (order_vol > 0) {
       new_price = this.current_price.close * increase_factor;
-    } else new_price = this.current_price.close * decrease_factor;
-
-    //console.log("ORDER:", order_vol);
-    //console.log("new price:", new_price);
-    // ************************************************
-
-    let new_vol = order_vol;
+      //console.log(`- Using increase: new price = ${new_price}`);
+    } else {
+      new_price = this.current_price.close * decrease_factor;
+      //console.log(`- Using decrease: new price = ${new_price}`);
+    }
 
     // update current price, max, min and vol
     new_price = clamp(new_price, this.min_price, this.max_price);
+    //console.log(`- Final price after clamping: ${new_price}`);
+    
     this.current_price.close = new_price;
     if (new_price > this.current_price.maximum)
       this.current_price.maximum = new_price;
     if (new_price < this.current_price.minimum)
       this.current_price.minimum = new_price;
 
-    this.current_price.vol += new_vol;
+    this.current_price.vol += order_vol;
   }
 
   setBox(x1, y1, w, h, dx = 0) {
@@ -129,7 +138,7 @@ class PriceProcess {
   drawFullGraph() {
     push();
     rectMode(CORNER)
-    noFill();
+    fill(bg_color);
     stroke(0);
     rect(this.box.x1, this.box.y1, this.box.w, this.box.h);
     pop();

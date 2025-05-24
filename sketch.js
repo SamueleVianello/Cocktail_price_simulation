@@ -4,6 +4,8 @@ let GLOBAL_CUSTOMERS = [];
 let TEXT_SCALE = 2;
 let SHOW_PROFIT = true;
 
+let bg_color = "#e1e1e1";
+
 
 // ------------ MODIFYABLE VARIABLES-------------
 let min_gin_price = 3;
@@ -31,6 +33,7 @@ let drink1;
 
 let entry_test;
 let register_test;
+let eng; 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -76,7 +79,7 @@ function setup() {
   register_test = new Register(0, 0.*windowHeight, windowWidth*0.19, windowHeight);
   register_test.create();
 
-  let eng = new Engine(sim.global_time);
+  eng = new Engine(sim.global_time);
   eng.importCommodities(commodities)
   //eng.logCommodityList();
   eng.importCocktails(cocktails)
@@ -89,25 +92,17 @@ function setup() {
 
 
 function draw() {
-  noLoop();
+  if (frameCount >=300){
+    let requests = ['gintonic01', 'vodkalemon01'];
+    let prices = eng.handlePriceRequests(requests);
+    console.log(prices);
+    noLoop();
+  } 
   background(220);
-  
-  for(let c of GLOBAL_COMMODITIES){
-    c.price_process.drawFullGraph();
-  }
-  
-  
+  eng.evolve()
+  eng.showMenu(0.75*width, 0, width, 0.8*height)
 
-  //GLOBAL_COMMODITIES[0].price_process.drawFullGraph();
-  //GLOBAL_COMMODITIES[1].price_process.drawFullGraph();
-  sim.evolve();
-  showMenu(0.75*width, 0, width, 0.8*height)
-
-
-  //console.log(GLOBAL_COMMODITIES[0])
-  //console.log(GLOBAL_COMMODITIES[1])
   if (frameCount ==  hours_to_simulate* (60 / dt) * 60) {
     noLoop();
   }
-
 }

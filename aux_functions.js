@@ -1,8 +1,7 @@
 function importCocktails(ct) {
     for (let c of ct) {
       let temp = new Cocktail(c.id, c.name, c.bases, c.other);
-      //temp.importBases()
-      temp.importBases();
+      temp.importBases(GLOBAL_COMMODITIES);
       GLOBAL_COCKTAILS.push(temp);
     }
 }

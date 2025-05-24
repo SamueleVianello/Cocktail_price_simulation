@@ -1,4 +1,9 @@
 currently working on:
+* completare sendOrders in engine class
+* Modificare simulazione per solo creazione ordini fake
+* Engine per tutta la parte di ricezione e processo ordini
+* aggiungere fattore moltiplicativo per eventi
+
 
 
 ######### EVENTI ################

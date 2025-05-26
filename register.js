@@ -1,6 +1,5 @@
-
 class Register {
-    constructor(x1, y1, w, h) {
+    constructor(x1, y1, w, h, engine) {
       this.x = x1;
       this.y = y1;
       this.w = w;
@@ -8,12 +7,30 @@ class Register {
       this.entries = [];
       this.entryHeight = 40;
       this.spacing = 10;
+      this.engine = engine;  // Store the engine reference
       
       // Main container
       this.container = createDiv('');
       this.container.position(x1, y1);
       this.container.size(w, h);
       this.container.id('register-container');
+      
+      // Create tabs container
+      this.tabsContainer = createDiv('');
+      this.tabsContainer.parent(this.container);
+      this.tabsContainer.class('tabs-container');
+      
+      // Create Cocktails tab
+      this.cocktailsTab = createDiv('Cocktails');
+      this.cocktailsTab.parent(this.tabsContainer);
+      this.cocktailsTab.class('tab active');
+      this.cocktailsTab.mousePressed(() => this.showTab('cocktails'));
+      
+      // Create Panini tab
+      this.paniniTab = createDiv('Panini');
+      this.paniniTab.parent(this.tabsContainer);
+      this.paniniTab.class('tab');
+      this.paniniTab.mousePressed(() => this.showTab('panini'));
       
       // Entries container
       this.entriesContainer = createDiv('');
@@ -36,6 +53,31 @@ class Register {
       this.container.style('display', 'flex');
       this.container.style('flex-direction', 'column');
       
+      // Style tabs container
+      this.tabsContainer.style('display', 'flex');
+      this.tabsContainer.style('margin-bottom', '10px');
+      this.tabsContainer.style('border-bottom', '1px solid #eee');
+      
+      // Style tab
+      const tabStyle = `
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 4px 4px 0 0;
+        margin-right: 5px;
+        background-color: #f0f0f0;
+        transition: background-color 0.2s;
+      `;
+      
+      // Apply base style to both tabs
+      this.cocktailsTab.style(tabStyle);
+      this.paniniTab.style(tabStyle);
+      
+      // Set initial active state
+      this.cocktailsTab.style('background-color', '#4CAF50');
+      this.cocktailsTab.style('color', 'white');
+      this.paniniTab.style('background-color', '#f0f0f0');
+      this.paniniTab.style('color', '#333');
+      
       this.entriesContainer.style('flex-grow', '1');
       this.entriesContainer.style('overflow-y', 'auto');
       this.entriesContainer.style('margin-bottom', '10px');
@@ -46,14 +88,35 @@ class Register {
       this.buttonsContainer.style('border-top', '1px solid #eee');
     }
   
+    showTab(tabName) {
+      // Reset all tabs to inactive state
+      this.cocktailsTab.style('background-color', '#f0f0f0');
+      this.cocktailsTab.style('color', '#333');
+      this.paniniTab.style('background-color', '#f0f0f0');
+      this.paniniTab.style('color', '#333');
+      
+      // Set active tab
+      if (tabName === 'cocktails') {
+        this.cocktailsTab.style('background-color', '#4CAF50');
+        this.cocktailsTab.style('color', 'white');
+        // Show cocktails content
+        this.entriesContainer.style('display', 'block');
+      } else if (tabName === 'panini') {
+        this.paniniTab.style('background-color', '#4CAF50');
+        this.paniniTab.style('color', 'white');
+        // Hide cocktails content for now
+        this.entriesContainer.style('display', 'none');
+      }
+    }
+  
     create() {
-      // Create entries for each GLOBAL_COCKTAILS
-      let n = GLOBAL_COCKTAILS.length;
+      // Create entries for each cocktail in the engine
+      let n = this.engine.cocktail_list.length;
       
       for (let i = 0; i < n; i++) {
         let entry = new RegisterEntry(
-          GLOBAL_COCKTAILS[i].name,
-          GLOBAL_COCKTAILS[i].id,
+          this.engine.cocktail_list[i].name,
+          this.engine.cocktail_list[i].id,
           this.w - this.spacing * 2,
           this.entryHeight,
           this.entriesContainer
@@ -109,12 +172,11 @@ class Register {
     getOrder() {
         return this.entries
           .map((entry, index) => ({
-            name: GLOBAL_COCKTAILS[index].name,
-            id: GLOBAL_COCKTAILS[index].id,
+            name: this.engine.cocktail_list[index].name,
+            id: this.engine.cocktail_list[index].id,
             quantity: entry.getAmount(),
-            unit_price: GLOBAL_COCKTAILS[index].getPrice(),
-            total_price: entry.getAmount() *GLOBAL_COCKTAILS[index].getPrice(),
-            // cocktail: GLOBAL_COCKTAILS[index],
+            unit_price: this.engine.cocktail_list[index].getPrice(),
+            total_price: entry.getAmount() * this.engine.cocktail_list[index].getPrice(),
           }))
           .filter(item => item.quantity > 0);
     }
@@ -139,7 +201,7 @@ class Register {
             let qty_ord = ord.items[i].quantity;
 
             // find associated cocktail
-            for (let ckt of GLOBAL_COCKTAILS){
+            for (let ckt of this.engine.cocktail_list){
                 if(ckt.id == ord.items[i].id){
                     single_ord = ckt;
                 }
@@ -147,14 +209,13 @@ class Register {
 
             // add relevant amount order to each of the bases of the cocktail
             for(let b of single_ord.bases){
-                for (let c of GLOBAL_COMMODITIES) {
+                for (let c of this.engine.commodity_list) {
                   if (c.id == b.id) {
                     c.addOrder(qty_ord * b.quantity / c.price_unit);
                   }
                 }
             }
         }
-        
     }
 
     printOrder(ord){

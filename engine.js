@@ -1,13 +1,19 @@
 class Engine {
-    constructor(time){
+    constructor(time,dt){
         this.cocktail_list =[];
         this.commodity_list=[];
         this.customer_list =[];
 
         this.start_time = time;
         this.current_time = time;
+        this.candles_dt = 60; //seconds
+        this.dt = dt;
 
         this.volatility_multiplier = 1.0;
+
+        this.order_history = [];
+
+        this.sim=null;
     }
 
     evolve(){
@@ -18,7 +24,7 @@ class Engine {
         //getRequests();
         let requests = ['gintonic01', 'vodkalemon01'];
         let prices = this.handlePriceRequests(requests);
-        console.log("Current prices for requests:", prices);
+        //console.log("Current prices for requests:", prices);
 
 
         // 2. Handle events and modifiers ======================
@@ -34,8 +40,13 @@ class Engine {
                 qty: (random(0,1) < 0.1)? 1 : 0 //how many orders of that cocktail
             },
         ]
-        console.log("Processing orders:", orders);
+        
+
+        if (this.sim != null) orders = this.sim.evolve();
+        //console.log("Processing orders:", orders);
+
         this.sendOrders(orders);
+        
         
         // Log commodity states before price update
         // console.log("Commodity states before price update:");
@@ -53,7 +64,7 @@ class Engine {
         // }
 
         // update time and show it onscreen
-        this.current_time += 1;
+        this.current_time += this.dt;
         // show clock
         this.showClock(width * 0.5, 0.88 * height);
     }
@@ -81,8 +92,10 @@ class Engine {
     }
 
     sendOrders(orders){
-        // TODO .......................
+        if (orders.length == 0) return;
 
+        console.log(toHHMMSS(this.current_time))
+        
         // cycle through all orders
         for (let i =0; i< orders.length; i++){
             let c = this.getCocktailById(orders[i].id);   
@@ -95,7 +108,12 @@ class Engine {
                         }
                       }
                 }
-                console.log("order of "+qty+" for "+orders[i].id )
+                console.log("---> order of "+qty+" for "+orders[i].id )
+                this.order_history.push({
+                    id: orders[i].id,
+                    qty: qty,
+                    time: this.current_time
+                });
             }
         }
     }
@@ -159,7 +177,6 @@ class Engine {
         fill(0);
         noStroke();
       
-      
         textAlign(LEFT);
         text('COCKTAIL', dh+x1, 2*dh )
         textAlign(CENTER);
@@ -190,11 +207,22 @@ class Engine {
     }
 
     //=================== IMPORT FUNCTIONS ==================================
+    addSimulation(sim){
+        this.sim = sim;
+    }
+
     importCommodities(comm) {
         // comm is an array of json objects
         for(let i=0;i<comm.length;i++  ){
             let c = comm[i];
-            this.commodity_list.push(new Commodity(c.id, c.name, c.min_price, c.max_price, c.start_price, c.price_unit, c.cost))
+            this.commodity_list.push(new Commodity(c.id, 
+                                                    c.name, 
+                                                    c.min_price, 
+                                                    c.max_price, 
+                                                    c.start_price, 
+                                                    c.price_unit, 
+                                                    c.cost,
+                                                    this.candles_dt))
 
             
             let n_vert = (floor(comm.length/2+0.8));
@@ -231,6 +259,46 @@ class Engine {
             //console.log(this.commodity_list[i].id, this.commodity_list[i].name)
             this.cocktail_list[i].logDetails();
         }
+    }
+
+    logOrderStatistics() {
+        let orders = this.order_history;
+        let orders_by_id = {};
+        let total_orders = 0;
+        let time_span = (this.current_time - this.start_time) / 3600; // Convert to hours
+        
+        // Count orders by ID
+        for(let i = 0; i < orders.length; i++) {
+            let id = orders[i].id;
+            if(orders_by_id[id] == undefined) orders_by_id[id] = 0;
+            orders_by_id[id] += orders[i].qty;
+            total_orders += orders[i].qty;
+        }
+        
+        // Find most and least popular
+        let most_popular = {id: null, qty: -1};
+        let least_popular = {id: null, qty: Infinity};
+        
+        for(let id in orders_by_id) {
+            if(orders_by_id[id] > most_popular.qty) {
+                most_popular = {id: id, qty: orders_by_id[id]};
+            }
+            if(orders_by_id[id] < least_popular.qty) {
+                least_popular = {id: id, qty: orders_by_id[id]};
+            }
+        }
+        
+        // Calculate average orders per hour
+        let avg_orders_per_hour = total_orders / time_span;
+        
+        // Log statistics
+        console.log("=== Order Statistics ===");
+        console.log("Total orders: "+ total_orders);
+        console.log("Average orders per hour: " + avg_orders_per_hour.toFixed(2));
+        console.log("Most popular: "+ most_popular.id + " with " + most_popular.qty + " orders");
+        console.log("Least popular: "+ least_popular.id + " with " + least_popular.qty + " orders");
+        
+        return orders_by_id;
     }
 
 

@@ -1,3 +1,17 @@
+function toHHMMSS(s) {
+  // converts seconds into hh:mm:ss format string
+  let neg_flag = s < 0;
+  s = Math.abs(s);
+  let h = Math.floor(s / 3600);
+  let min = Math.floor((s - h * 3600) / 60);
+  let sec = Math.floor(s - h * 3600 - min * 60);
+  h = h % 24;
+  let str_h = h < 1 ? "00:" : (h < 10 ? "0" : "") + h + ":";
+  let str_min = (min < 10 ? "0" : "") + min + ":";
+  let str_sec = (sec < 10 ? "0" : "") + sec;
+  return (neg_flag ? "-" : "") + str_h + str_min + str_sec;
+}
+
 function importCocktails(ct) {
     for (let c of ct) {
       let temp = new Cocktail(c.id, c.name, c.bases, c.other);

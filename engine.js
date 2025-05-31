@@ -3,6 +3,7 @@ class Engine {
         this.cocktail_list =[];
         this.commodity_list=[];
         this.customer_list =[];
+        this.event_list = [];
 
         this.start_time = time;
         this.current_time = time;
@@ -28,6 +29,13 @@ class Engine {
 
 
         // 2. Handle events and modifiers ======================
+        print(this.event_list)
+        for(let e of this.event_list){
+            if ( e.isHappening(this.current_time)){
+                // print("Event is Happening")
+                if( !e.applied) e.applyEvent()
+            }
+        }
 
 
         // 4. Receive orders and update prices =================
@@ -89,6 +97,30 @@ class Engine {
             }
         }
         return prices;
+    }
+
+    createEvent(label,t=0){
+        if (t==0) t=this.current_time;
+
+        if(label == "crash"){
+            this.event_list.push(
+                new CrashEvent(t,
+                    t+60*30,
+                    0.3,
+                    this.commodity_list
+                )
+            )
+        }
+
+        if(label == "fomo"){
+            this.event_list.push(
+                new FomoEvent(t,
+                    t+60*30,
+                    0.3,
+                    this.commodity_list
+                )
+            )
+        }
     }
 
     sendOrders(orders){

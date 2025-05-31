@@ -51,6 +51,18 @@ class PriceProcess {
 
     //console.log(this.box);
   }
+  
+  modifyPrice(f){
+    let new_price = clamp(this.current_price.close * (1-f), this.min_price, this.max_price);
+    //console.log(`- Final price after clamping: ${new_price}`);
+    
+    this.current_price.close = new_price;
+    if (new_price > this.current_price.maximum)
+      this.current_price.maximum = new_price;
+    if (new_price < this.current_price.minimum)
+      this.current_price.minimum = new_price;
+    this.current_price
+  }
 
   updatePrice(order_vol = 0) {
     // PRICE IS UPDATED at the END of each -dt- interval

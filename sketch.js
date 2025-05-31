@@ -16,10 +16,10 @@ let gin_cost = 4;
 let increase_perc = 0.04; // 0.01 = 1% increase per SINGLE ORDER
 let required_orders = 1; // needed orders to increase
 let decrease_perc = -0.005; // -0.01 = 1% decrease per MINUTE
-let orders_per_hour = 50; //total orders in the bar per hour
+let orders_per_hour = 150; //total orders in the bar per hour
 let N_customers = 60;
 
-let dt = 60; // seconds between every price update
+let dt = 10; // seconds between every price update
 let interval_time = 5 * 60; // seconds between every CANDLE update
 let hours_to_simulate = 5;
 // ------------------------------------------------
@@ -50,6 +50,8 @@ function setup() {
   eng.importCocktails(cocktails)
   //eng.logCocktails();
   //eng.evolve()
+  eng.createEvent("crash",start_time+60*20)
+  eng.createEvent("fomo",start_time+60*60)
 
   // ----------------------------- REGISTER ------------------------------
   register_test = new Register(0, 0.*windowHeight, windowWidth*0.19, windowHeight, eng);
@@ -85,7 +87,7 @@ function windowResized() {
 }
 
 function draw() {
-  if (frameCount >=300){
+  if (frameCount >=600){
     //let requests = ['gintonic01', 'vodkalemon01'];
     //let prices = eng.handlePriceRequests(requests);
     //console.log(prices);

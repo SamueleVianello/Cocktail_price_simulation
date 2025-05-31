@@ -26,16 +26,34 @@ class Register {
       this.cocktailsTab.class('tab active');
       this.cocktailsTab.mousePressed(() => this.showTab('cocktails'));
       
-      // Create Panini tab
-      this.paniniTab = createDiv('Panini');
-      this.paniniTab.parent(this.tabsContainer);
-      this.paniniTab.class('tab');
-      this.paniniTab.mousePressed(() => this.showTab('panini'));
+      // Create Events tab
+      this.eventsTab = createDiv('Events');
+      this.eventsTab.parent(this.tabsContainer);
+      this.eventsTab.class('tab');
+      this.eventsTab.mousePressed(() => this.showTab('events'));
       
       // Entries container
       this.entriesContainer = createDiv('');
       this.entriesContainer.parent(this.container);
       this.entriesContainer.class('entries-container');
+
+      // Create event buttons
+      this.crashButton = createButton('Crash');
+      this.fomoButton = createButton('FOMO');
+      this.volatilityButton = createButton('Volatility Hour');
+      this.ipoButton = createButton('IPO');
+
+      // Parent the buttons to the entries container
+      this.crashButton.parent(this.entriesContainer);
+      this.fomoButton.parent(this.entriesContainer);
+      this.volatilityButton.parent(this.entriesContainer);
+      this.ipoButton.parent(this.entriesContainer);
+
+      // Add click handlers for each button
+      this.crashButton.mousePressed(() => this.activateEvent('crash'));
+      this.fomoButton.mousePressed(() => this.activateEvent('fomo'));
+      this.volatilityButton.mousePressed(() => this.activateEvent('volatility'));
+      this.ipoButton.mousePressed(() => this.activateEvent('ipo'));
       
       // Buttons container
       this.buttonsContainer = createDiv('');
@@ -70,17 +88,36 @@ class Register {
       
       // Apply base style to both tabs
       this.cocktailsTab.style(tabStyle);
-      this.paniniTab.style(tabStyle);
+      this.eventsTab.style(tabStyle);
       
       // Set initial active state
       this.cocktailsTab.style('background-color', '#4CAF50');
       this.cocktailsTab.style('color', 'white');
-      this.paniniTab.style('background-color', '#f0f0f0');
-      this.paniniTab.style('color', '#333');
+      this.eventsTab.style('background-color', '#f0f0f0');
+      this.eventsTab.style('color', '#333');
       
       this.entriesContainer.style('flex-grow', '1');
       this.entriesContainer.style('overflow-y', 'auto');
       this.entriesContainer.style('margin-bottom', '10px');
+      
+      // Style event buttons
+      const eventButtonStyle = `
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        background-color: #2196F3;
+        color: white;
+        transition: background-color 0.2s;
+      `;
+      
+      this.crashButton.style(eventButtonStyle);
+      this.fomoButton.style(eventButtonStyle);
+      this.volatilityButton.style(eventButtonStyle);
+      this.ipoButton.style(eventButtonStyle);
       
       this.buttonsContainer.style('display', 'flex');
       this.buttonsContainer.style('gap', '10px');
@@ -92,20 +129,34 @@ class Register {
       // Reset all tabs to inactive state
       this.cocktailsTab.style('background-color', '#f0f0f0');
       this.cocktailsTab.style('color', '#333');
-      this.paniniTab.style('background-color', '#f0f0f0');
-      this.paniniTab.style('color', '#333');
+      this.eventsTab.style('background-color', '#f0f0f0');
+      this.eventsTab.style('color', '#333');
       
-      // Set active tab
+      // Hide all entries and buttons first
+      this.entries.forEach(entry => {
+        entry.container.style('display', 'none');
+      });
+      this.crashButton.style('display', 'none');
+      this.fomoButton.style('display', 'none');
+      this.volatilityButton.style('display', 'none');
+      this.ipoButton.style('display', 'none');
+      
+      // Set active tab and show appropriate content
       if (tabName === 'cocktails') {
         this.cocktailsTab.style('background-color', '#4CAF50');
         this.cocktailsTab.style('color', 'white');
-        // Show cocktails content
-        this.entriesContainer.style('display', 'block');
-      } else if (tabName === 'panini') {
-        this.paniniTab.style('background-color', '#4CAF50');
-        this.paniniTab.style('color', 'white');
-        // Hide cocktails content for now
-        this.entriesContainer.style('display', 'none');
+        // Show cocktail entries
+        this.entries.forEach(entry => {
+          entry.container.style('display', 'flex');
+        });
+      } else if (tabName === 'events') {
+        this.eventsTab.style('background-color', '#4CAF50');
+        this.eventsTab.style('color', 'white');
+        // Show event buttons
+        this.crashButton.style('display', 'block');
+        this.fomoButton.style('display', 'block');
+        this.volatilityButton.style('display', 'block');
+        this.ipoButton.style('display', 'block');
       }
     }
   

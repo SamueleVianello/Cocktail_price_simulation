@@ -94,6 +94,10 @@ class Commodity {
     //console.log("Added ", qty);
   }
 
+  modifyPrice(factor){
+    this.price_process.modifyPrice(factor);
+  }
+
   updatePrice() {
     this.price_process.updatePrice(this.current_order.vol);
     this.current_order.price = this.price_process.current_price.close;

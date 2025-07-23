@@ -8,14 +8,6 @@ let bg_color = "#e1e1e1";
 
 
 // ------------ MODIFYABLE VARIABLES-------------
-let min_gin_price = 3;
-let start_gin_price = 5;
-let max_gin_price = 8;
-let gin_cost = 4;
-
-let increase_perc = 0.04; // 0.01 = 1% increase per SINGLE ORDER
-let required_orders = 1; // needed orders to increase
-let decrease_perc = -0.005; // -0.01 = 1% decrease per MINUTE
 let orders_per_hour = 150; //total orders in the bar per hour
 let N_customers = 60;
 
@@ -58,12 +50,10 @@ function setup() {
   register_test.create();
 
   // ----------------------------- SIMULATION -----------------------------
-
   // create simulation
   sim = new Simulation(dt, interval_time); //time in seconds
   sim.global_time = eng.global_time; // opening hour in seconds
   eng.addSimulation(sim);
-
 
   // create all customers and import them
   for (let i = 0; i < N_customers; i++) {
@@ -74,6 +64,7 @@ function setup() {
       eng.cocktail_list
     );
   }
+  //------------------------------------------------
 }
 
 function windowResized() {

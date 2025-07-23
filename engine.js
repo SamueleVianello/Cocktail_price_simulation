@@ -86,7 +86,7 @@ class Engine {
                 prices.push(price);
             }
             else{ //if not found among cocktails search among commodities **TBC**
-                let comm = this.getCommoditylById(reqs[i]);
+                let comm = this.getCommodityById(reqs[i]);
                 if(comm != null){
                     let price = comm.getPrice();
                     prices.push(price);
@@ -171,7 +171,7 @@ class Engine {
         return null;
     }
 
-    getCommoditylById(id){
+    getCommodityById(id){
         for(let i=0; i<this.commodity_list.length; i++){
             if(this.commodity_list[i].id == id){
                 return this.commodity_list[i];

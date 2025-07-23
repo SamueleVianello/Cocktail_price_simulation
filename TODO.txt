@@ -1,18 +1,8 @@
 currently working on:
-* completare sendOrders in engine class
-* Modificare simulazione per solo creazione ordini fake
-* Engine per tutta la parte di ricezione e processo ordini
 * aggiungere fattore moltiplicativo per eventi
-
-
+* creare evento volatility hour
 
 ######### EVENTI ################
-
-# CROLLO DI MERCATO:
----> se per tot minuti (30m) nessun ordine, crash di mercato: SCENDI a min_price+x%
----> bottone rosso
----> ulteriori condizioni da implementare 
-
 
 # HAPPY HOUR VOLATILE (periodo in cui i salti sono 5x il normale)
 

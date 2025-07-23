@@ -10,7 +10,7 @@ class Engine {
         this.candles_dt = 60; //seconds
         this.dt = dt;
 
-        this.volatility_multiplier = 1.0;
+        //this.volatility_multiplier = 1.0;
 
         this.order_history = [];
 
@@ -35,6 +35,9 @@ class Engine {
                 // print("Event is Happening")
                 if( !e.applied) e.applyEvent()
             }
+            else{
+                if(e.applied) e.unapplyEvent()
+            }
         }
 
 
@@ -51,7 +54,7 @@ class Engine {
         
 
         if (this.sim != null) orders = this.sim.evolve();
-        //console.log("Processing orders:", orders);
+        console.log("Processing orders:", orders);
 
         this.sendOrders(orders);
         
@@ -99,15 +102,24 @@ class Engine {
         return prices;
     }
 
-    createEvent(label,t=0){
+    createEvent(label,comm_list=[],t=0, t_end=0, multipler=1){
         if (t==0) t=this.current_time;
+
+        // TODO: modify list to use id instead of object
+        let temp_list = [];
+        for (let i = 0; i < comm_list.length; i++) {
+            temp_list.push( this.getCommodityById(comm_list[i]));
+            
+        }
+
+        comm_list = temp_list;
 
         if(label == "crash"){
             this.event_list.push(
                 new CrashEvent(t,
                     t+60*30,
                     0.3,
-                    this.commodity_list
+                    comm_list
                 )
             )
         }
@@ -117,7 +129,17 @@ class Engine {
                 new FomoEvent(t,
                     t+60*30,
                     0.3,
-                    this.commodity_list
+                    comm_list
+                )
+            )
+        }
+
+        if(label == "happy_vola"){
+            this.event_list.push(
+                new HappyVolatilityEvent(t,
+                    t_end,
+                    multipler,
+                    comm_list
                 )
             )
         }
@@ -137,6 +159,7 @@ class Engine {
                     for (let k of this.commodity_list) {
                         if (k.id == b.id) {
                           k.addOrder(qty* b.quantity / k.price_unit);
+                          //console.log(qty, b.quantity, k.price_unit, "-->", qty* b.quantity / k.price_unit);
                         }
                       }
                 }

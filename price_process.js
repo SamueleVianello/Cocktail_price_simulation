@@ -12,12 +12,16 @@ class PriceProcess {
     min_price,
     max_price,
     initial_price,
+    increase_perc=0.04,
+    decrease_perc=-0.005,
     dt = 10
   ) {
     this.asset_id = asset_id;
     this.asset_name = asset_name;
     this.min_price = min_price;
     this.max_price = max_price;
+    this.increase_perc = increase_perc;
+    this.decrease_perc = decrease_perc;
     this.dt = dt; // in seconds, used to compute the price update
     this.history = { //history of price candles data and volumes
       timestamp: [],
@@ -64,7 +68,7 @@ class PriceProcess {
     this.current_price
   }
 
-  updatePrice(order_vol = 0) {
+  updatePrice(order_vol = 0, multiplier =1) {
     // PRICE IS UPDATED at the END of each -dt- interval
 
     // ************************************************
@@ -72,11 +76,11 @@ class PriceProcess {
 
     let new_price;
     let increase_factor = Math.pow(
-      1 + increase_perc,
-      order_vol / required_orders
+      1 + this.increase_perc * multiplier,
+      order_vol
     );
 
-    let decrease_factor = Math.pow(1 + decrease_perc, this.dt / 60);
+    let decrease_factor = Math.pow(1 + this.decrease_perc * multiplier, this.dt / 60);
 
     // console.log(`Price update for ${this.asset_id}:`)
     // console.log(`- Current price: ${this.current_price.close}`)

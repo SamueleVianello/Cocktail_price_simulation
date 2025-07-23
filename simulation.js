@@ -9,14 +9,6 @@ class Simulation{
     this.prices = [];
   }
 
-  /* // CAPIRE PERCHE' NON VA --> serve una variabile globale per salvare il customer
-  addCustomer() {
-    //let new_customer = ;
-    this.customers.push(new Customer(2, "gin", this.dt));
-    // TODO: vedere se serve aggiornare altro del customer
-  }
-  */
-
   addCustomer(cust,cocktail_list) {
     cust.importCocktail(cocktail_list);
     this.customers.push(cust);

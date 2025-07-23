@@ -42,8 +42,9 @@ function setup() {
   eng.importCocktails(cocktails)
   //eng.logCocktails();
   //eng.evolve()
-  eng.createEvent("crash",start_time+60*20)
-  eng.createEvent("fomo",start_time+60*60)
+  eng.createEvent("crash",['gin','vodka'], start_time+60*20)
+  eng.createEvent("fomo",['gin','vodka'],start_time+60*60)
+  eng.createEvent("happy_vola",['tequila','rumbianco'], start_time+60*60, start_time+60*60)
 
   // ----------------------------- REGISTER ------------------------------
   register_test = new Register(0, 0.*windowHeight, windowWidth*0.19, windowHeight, eng);
@@ -78,7 +79,7 @@ function windowResized() {
 }
 
 function draw() {
-  if (frameCount >=600){
+  if (frameCount >=660){
     //let requests = ['gintonic01', 'vodkalemon01'];
     //let prices = eng.handlePriceRequests(requests);
     //console.log(prices);

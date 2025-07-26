@@ -22,10 +22,16 @@ class Engine {
 
 
         // 1. Check price requests and answer ==================
+        // *********  RICEVI RICHIESTE DI PREZZO ********
         //getRequests();
+
+        // *** ESEMPIO DI RICHIESTA ****
         let requests = ['gintonic01', 'vodkalemon01'];
         let prices = this.handlePriceRequests(requests);
         //console.log("Current prices for requests:", prices);
+
+        // *********  RESTITUISCI RICHIESTE DI PREZZO ********
+        //sendRequestsResults();
 
 
         // 2. Handle events and modifiers ======================
@@ -42,6 +48,10 @@ class Engine {
 
 
         // 4. Receive orders and update prices =================
+        // *********  RICEVI ORDINI CONFERMATI e PAGATI ********
+        //getOrders();
+
+        // *** ESEMPIO ORDINE
         let orders = [{
                 id: 'vodkalemon01',
                 qty: (random(0,1) < 0.1)? 1 : 0 //how many orders of that cocktail
@@ -52,7 +62,7 @@ class Engine {
             },
         ]
         
-
+        // sample orders
         if (this.sim != null) orders = this.sim.evolve();
         console.log("Processing orders:", orders);
 
@@ -74,6 +84,8 @@ class Engine {
         //     console.log(`${k.id}: current_order.vol=${k.current_order.vol}, current_price=${k.current_order.price}`);
         // }
 
+
+        // 5. Final updates of engine ======================
         // update time
         this.current_time += this.dt;
         // show clock

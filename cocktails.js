@@ -9,14 +9,21 @@ class Cocktail {
     //this.importBases();
   }
 
-  importBases() {
+  importBases(base_list) {
     // look into all spirits and push them into this.base
     for (let i = 0; i < this.bases.length; i++) {
-      for (let sp of GLOBAL_COMMODITIES) {
+      for (let sp of base_list) {
         if (this.bases[i].id == sp.id) {
           this.bases[i].commodity = sp;
         }
       }
+    }
+    
+  }
+
+  addOrder(qty){
+    for (let b of this.bases){
+      b.commodity.addOrder(b.quantity * qty);
     }
   }
 
@@ -32,7 +39,7 @@ class Cocktail {
       
       // compute total price of alcohol base ingredients
       let base_price = this.bases.reduce(
-        (partialSum, b) => partialSum +b.quantity * b.commodity.getPrice(dt)/b.commodity.price_unit,
+        (partialSum, b) => partialSum + b.commodity.getPrice(dt) * b.quantity/b.commodity.price_unit,
         0
       );
       
@@ -45,6 +52,14 @@ class Cocktail {
     else{
       console.log("ERROR: can't predict future price!");
     }
+  }
+
+  logDetails(){
+    console.log('-------- COCKTAIL LOG -----------')
+    console.log("Cocktail: ", this.id, this.name);
+    console.log("Bases: ", this.bases);
+    console.log("Other ingredients: ", this.other);
+    console.log('---------------------------------')
   }
 
 

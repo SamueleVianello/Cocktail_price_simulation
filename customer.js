@@ -7,12 +7,7 @@ class Customer {
     this.dt = dt; // dt is in seconds
     this.add_drink = 0;
 
-    for (let i = 0; i < GLOBAL_COCKTAILS.length; i++) {
-      //console.log(drink_id, i, GLOBAL_COCKTAILS[i].id);
-      if (this.drink_id == GLOBAL_COCKTAILS[i].id) {
-        this.cocktail = GLOBAL_COCKTAILS[i];
-      }
-    }
+    this.cocktail = null;
 
     this.poisson = new PoissonProcess(dph, dt / 3600);
   }
@@ -34,12 +29,13 @@ class Customer {
     }
     */
   }
-
-  importCocktail() {
-    for (let i = 0; i < GLOBAL_COCKTAILS.length; i++) {
-      if (this.drink_id == GLOBAL_COCKTAILS[i].id) {
-        this.cocktail = GLOBAL_COCKTAILS[i];
+  
+  importCocktail(cocktail_list) {
+    for (let i = 0; i < cocktail_list.length; i++) {
+      if (this.drink_id == cocktail_list[i].id) {
+        this.cocktail = cocktail_list[i];
       }
     }
   }
+  
 }

@@ -3,23 +3,28 @@ function dot(v, w) {
 }
 
 class Commodity {
-  constructor(id, name, min_price, max_price, start_price, unit, cost = 0, dt=10 ) {
+  constructor(id, name, min_price, max_price, start_price, unit, cost = 0, dt=10) {
     this.id = id;
     this.name = name;
     this.min_price = min_price;
     this.max_price = max_price;
     this.start_price = start_price;
+    this.increase_perc=0.04;
+    this.decrease_perc=-0.005;
     this.price_unit = unit; //units used for the quoted price
     this.cost = cost; //
     this.dt = dt;
+    this.multiplier = 1; // multiplier for the price update [for HAPPY VOLATILITY event]
 
     this.price_process = new PriceProcess(
-      id,
-      name,
-      min_price,
-      max_price,
-      start_price,
-      dt
+      this.id,
+      this.name,
+      this.min_price,
+      this.max_price,
+      this.start_price,
+      this.increase_perc,
+      this.decrease_perc,
+      this.dt
     );
 
     this.order_history = {
@@ -94,8 +99,12 @@ class Commodity {
     //console.log("Added ", qty);
   }
 
+  modifyPrice(factor){
+    this.price_process.modifyPrice(factor);
+  }
+
   updatePrice() {
-    this.price_process.updatePrice(this.current_order.vol);
+    this.price_process.updatePrice(this.current_order.vol, this.multiplier);
     this.current_order.price = this.price_process.current_price.close;
   }
 
@@ -114,6 +123,18 @@ class Commodity {
   }
 
   
-
+  logDetails(){
+    console.log('-------- COMMODITY LOG -----------')
+    console.log("ID", this.id);
+    console.log("Name", this.name);
+    console.log("Min price", this.min_price);
+    console.log("Max price", this.max_price);
+    console.log("Start price", this.start_price);
+    console.log("Price unit", this.price_unit);
+    console.log("Cost", this.cost);
+    console.log("dt", this.dt);
+    console.log("Current price", this.current_order.price);
+    //console.log("Order history", this.order_history);
+  }
   
 }

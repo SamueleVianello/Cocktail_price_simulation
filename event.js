@@ -80,7 +80,7 @@ class HappyVolatilityEvent extends Event{
     applyEvent(){
         for (let k of this.commodity_list) {
             //console.log(""+k.id+" "+k.current_order.vol)
-            k.multiplier = this.multiplier;
+            k.multiplier = k.multiplier *this.multiplier;
         }
         this.applied = true;
     }

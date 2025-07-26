@@ -40,20 +40,20 @@ class Register {
       // Create event buttons
       this.crashButton = createButton('Crash');
       this.fomoButton = createButton('FOMO');
-      this.volatilityButton = createButton('Volatility Hour');
-      this.ipoButton = createButton('IPO');
+      //this.volatilityButton = createButton('Volatility Hour');
+      //this.ipoButton = createButton('IPO');
 
       // Parent the buttons to the entries container
       this.crashButton.parent(this.entriesContainer);
       this.fomoButton.parent(this.entriesContainer);
-      this.volatilityButton.parent(this.entriesContainer);
-      this.ipoButton.parent(this.entriesContainer);
+      //this.volatilityButton.parent(this.entriesContainer);
+      //this.ipoButton.parent(this.entriesContainer);
 
       // Add click handlers for each button
       this.crashButton.mousePressed(() => this.activateEvent('crash'));
       this.fomoButton.mousePressed(() => this.activateEvent('fomo'));
-      this.volatilityButton.mousePressed(() => this.activateEvent('volatility'));
-      this.ipoButton.mousePressed(() => this.activateEvent('ipo'));
+      //this.volatilityButton.mousePressed(() => this.activateEvent('happy_vola'));
+      //this.ipoButton.mousePressed(() => this.activateEvent('ipo'));
       
       // Buttons container
       this.buttonsContainer = createDiv('');
@@ -116,8 +116,8 @@ class Register {
       
       this.crashButton.style(eventButtonStyle);
       this.fomoButton.style(eventButtonStyle);
-      this.volatilityButton.style(eventButtonStyle);
-      this.ipoButton.style(eventButtonStyle);
+      //this.volatilityButton.style(eventButtonStyle);
+      //this.ipoButton.style(eventButtonStyle);
       
       this.buttonsContainer.style('display', 'flex');
       this.buttonsContainer.style('gap', '10px');
@@ -138,8 +138,8 @@ class Register {
       });
       this.crashButton.style('display', 'none');
       this.fomoButton.style('display', 'none');
-      this.volatilityButton.style('display', 'none');
-      this.ipoButton.style('display', 'none');
+      //this.volatilityButton.style('display', 'none');
+      //this.ipoButton.style('display', 'none');
       
       // Set active tab and show appropriate content
       if (tabName === 'cocktails') {
@@ -155,8 +155,8 @@ class Register {
         // Show event buttons
         this.crashButton.style('display', 'block');
         this.fomoButton.style('display', 'block');
-        this.volatilityButton.style('display', 'block');
-        this.ipoButton.style('display', 'block');
+        //this.volatilityButton.style('display', 'block');
+        //this.ipoButton.style('display', 'block');
       }
     }
   

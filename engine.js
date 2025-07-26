@@ -2,7 +2,6 @@ class Engine {
     constructor(time,dt){
         this.cocktail_list =[];
         this.commodity_list=[];
-        this.customer_list =[];
         this.event_list = [];
 
         this.start_time = time;
@@ -14,6 +13,7 @@ class Engine {
 
         this.order_history = [];
 
+        // sim is used only to simulate customers in a DEV and TEST setting
         this.sim=null;
     }
 
@@ -74,7 +74,7 @@ class Engine {
         //     console.log(`${k.id}: current_order.vol=${k.current_order.vol}, current_price=${k.current_order.price}`);
         // }
 
-        // update time and show it onscreen
+        // update time
         this.current_time += this.dt;
         // show clock
         this.showClock(width * 0.5, 0.88 * height);

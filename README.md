@@ -11,20 +11,10 @@ Lots still TODO but looks interesting...
 
 ```mermaid
 classDiagram
-    class Register {
-        -engine
-        -entries : RegisterEntry[]
-        -cocktailsTab
-        -eventsTab
-        -crashButton
-        -fomoButton
-        -volatilityButton
-        -ipoButton
-    }
-    class RegisterEntry {
-        -order_amount
-        -id
-        -container
+    class Engine {
+        cocktail_list : Cocktail[]
+        commodity_list : Commodity[]
+        event_list : Event[]
     }
     class Cocktail {
         -id
@@ -40,16 +30,21 @@ classDiagram
     class PriceProcess {
         -asset_id
         -asset_name
+        -drawFullGraph()
     }
-    class PoissonProcess {
-        -lambda
-        -dt
+    class Register {
+        -engine_reference : Engine
+        -entries : RegisterEntry[]
+        -cocktailsTab
     }
-
+    class RegisterEntry {
+        -order_amount
+        -id
+    }
+    
+    Cocktail --> Commodity : bases[] contains
+    Commodity --> PriceProcess : its price is modelled by
     Register --> RegisterEntry : contains
     Register --> Cocktail : uses via engine.cocktail_list
-    Register --> Commodity : uses via engine.commodity_list
-    Cocktail --> Commodity : bases[] contains Commodity 
-    Commodity --> PriceProcess : has
-    PriceProcess --> PoissonProcess : (not direct, but both are process classes)
+    
 ``` 

@@ -15,11 +15,12 @@ classDiagram
         cocktail_list : Cocktail[]
         commodity_list : Commodity[]
         event_list : Event[]
+        sim : Simulation
     }
     class Cocktail {
         -id
         -name
-        -bases
+        -bases : Commodity[]
         -other
     }
     class Commodity {
@@ -27,6 +28,12 @@ classDiagram
         -name
         -price_process : PriceProcess
     }
+    class Event {
+        -start_time
+        -end_time
+        -type
+    }
+
     class PriceProcess {
         -asset_id
         -asset_name
@@ -41,10 +48,21 @@ classDiagram
         -order_amount
         -id
     }
+    class Simulation{
+        -customers : Customer[]
+    }
+    class Customer{
+        -drink_id
+        -total_drinks
+    }
     
-    Cocktail --> Commodity : bases[] contains
+    Cocktail --> Commodity
     Commodity --> PriceProcess : its price is modelled by
-    Register --> RegisterEntry : contains
-    Register --> Cocktail : uses via engine.cocktail_list
+    Register --> RegisterEntry
+    Engine --> Cocktail
+    Engine --> Commodity
+    Engine --> Event
+    Engine --> Simulation
+    Simulation --> Customer
     
 ``` 

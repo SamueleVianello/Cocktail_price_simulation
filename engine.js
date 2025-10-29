@@ -1,13 +1,23 @@
 class Engine {
-    constructor(time,dt){
+    constructor(time,dt, candles_dt){
         this.cocktail_list =[];
         this.commodity_list=[];
         this.event_list = [];
-
+        if(dt ==0) time = true;
         this.start_time = time;
         this.current_time = time;
-        this.candles_dt = 60; //seconds
+        this.candles_dt = candles_dt; //seconds
         this.dt = dt;
+
+        this.prev_time = time;
+        this.real_time = false;
+        this.day_start = new Date().setHours(0,0,0,0);
+        if(dt ==0) {
+            this.real_time = true;
+            this.start_time = (Date.now()-this.day_start)/1000;
+            this.current_time = this.start_time;
+            this.prev_time = this.current_time;
+        }
 
         //this.volatility_multiplier = 1.0;
 
@@ -19,6 +29,12 @@ class Engine {
 
     evolve(){
         // 0. Get the current time =============================
+        if(this.real_time){
+            this.prev_time = this.current_time;
+            this.current_time =(Date.now()-this.day_start)/1000;
+            this.dt = this.current_time - this.prev_time;
+        }
+
 
 
         // 1. Check price requests and answer ==================
@@ -35,7 +51,7 @@ class Engine {
 
 
         // 2. Handle events and modifiers ======================
-        print(this.event_list)
+        //print(this.event_list)
         for(let e of this.event_list){
             if ( e.isHappening(this.current_time)){
                 // print("Event is Happening")
@@ -64,7 +80,7 @@ class Engine {
         
         // sample orders
         if (this.sim != null) orders = this.sim.evolve();
-        console.log("Processing orders:", orders);
+        // console.log("Processing orders:", orders);
 
         this.sendOrders(orders);
         
@@ -87,7 +103,7 @@ class Engine {
 
         // 5. Final updates of engine ======================
         // update time
-        this.current_time += this.dt;
+        if (!this.real_time) this.current_time += this.dt;
         // show clock
         this.showClock(width * 0.5, 0.88 * height);
     }
@@ -188,10 +204,14 @@ class Engine {
     updatePrices(){
         for (let k of this.commodity_list) {
             //console.log(""+k.id+" "+k.current_order.vol)
-            k.updatePrice();
+            k.updatePrice(this.dt);
             k.saveHistory(this.current_time);
+            // check if neede to create candle
+            let prev_i = floor(this.prev_time/this.candles_dt);
+            let curr_i = floor(this.current_time/this.candles_dt);
+
             // Save price history at regular intervals
-            if (this.current_time % k.dt === 0) {
+            if (curr_i > prev_i) {
                 k.price_process.savePrice(this.current_time);
             }
         }

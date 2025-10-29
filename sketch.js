@@ -11,9 +11,12 @@ let bg_color = "#e1e1e1";
 let orders_per_hour = 150; //total orders in the bar per hour
 let N_customers = 60;
 
-let dt = 10; // seconds between every price update
-let interval_time = 5 * 60; // seconds between every CANDLE update
+let dt = 0; // seconds for simulation: if = 0 then real time
+let candle_time = 30; // seconds between every CANDLE update
 let hours_to_simulate = 5;
+
+let INCREASE_PERC = 0.02; // 0.02 means 2% increase per order
+let DECREASE_PERC = -0.004; // -0.004 means 0.4% decrease per MINUTE
 // ------------------------------------------------
 
 let sim;
@@ -36,7 +39,7 @@ function setup() {
 
   // ----------------------------- ENGINE -----------------------------
   let start_time = 21 * 60 * 60;
-  eng = new Engine(start_time, dt);
+  eng = new Engine(start_time, dt, candle_time);
   eng.importCommodities(commodities)
   //eng.logCommodityList();
   eng.importCocktails(cocktails)
@@ -53,7 +56,7 @@ function setup() {
 
   // ----------------------------- SIMULATION -----------------------------
   // create simulation
-  sim = new Simulation(dt, interval_time); //time in seconds
+  sim = new Simulation(dt, candle_time); //time in seconds
   sim.global_time = eng.global_time; // opening hour in seconds
   eng.addSimulation(sim);
 
@@ -80,12 +83,12 @@ function windowResized() {
 }
 
 function draw() {
-  if (frameCount >=800){
+  if (frameCount %800==0){
     //let requests = ['gintonic01', 'vodkalemon01'];
     //let prices = eng.handlePriceRequests(requests);
     //console.log(prices);
     eng.logOrderStatistics();
-    noLoop();
+    //noLoop();
   } 
   background(220);
   eng.evolve()

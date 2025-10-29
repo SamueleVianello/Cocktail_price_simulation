@@ -68,7 +68,7 @@ class PriceProcess {
     this.current_price
   }
 
-  updatePrice(order_vol = 0, multiplier =1) {
+  updatePrice(order_vol = 0, multiplier =1, dt = this.dt) {
     // PRICE IS UPDATED at the END of each -dt- interval
 
     // ************************************************
@@ -80,7 +80,7 @@ class PriceProcess {
       order_vol
     );
 
-    let decrease_factor = Math.pow(1 + this.decrease_perc * multiplier, this.dt / 60);
+    let decrease_factor = Math.pow(1 + this.decrease_perc * multiplier, dt / 60);
 
     // console.log(`Price update for ${this.asset_id}:`)
     // console.log(`- Current price: ${this.current_price.close}`)

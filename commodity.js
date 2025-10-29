@@ -9,8 +9,8 @@ class Commodity {
     this.min_price = min_price;
     this.max_price = max_price;
     this.start_price = start_price;
-    this.increase_perc=0.04;
-    this.decrease_perc=-0.005;
+    this.increase_perc=INCREASE_PERC;
+    this.decrease_perc=DECREASE_PERC;
     this.price_unit = unit; //units used for the quoted price
     this.cost = cost; //
     this.dt = dt;
@@ -103,8 +103,8 @@ class Commodity {
     this.price_process.modifyPrice(factor);
   }
 
-  updatePrice() {
-    this.price_process.updatePrice(this.current_order.vol, this.multiplier);
+  updatePrice(dt = this.dt) {
+    this.price_process.updatePrice(this.current_order.vol, this.multiplier, dt);
     this.current_order.price = this.price_process.current_price.close;
   }
 

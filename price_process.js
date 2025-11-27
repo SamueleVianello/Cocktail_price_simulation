@@ -57,7 +57,7 @@ class PriceProcess {
   }
   
   modifyPrice(f){
-    let new_price = clamp(this.current_price.close * (1-f), this.min_price, this.max_price);
+    let new_price = clamp(this.current_price.close * (1+f), this.min_price, this.max_price);
     //console.log(`- Final price after clamping: ${new_price}`);
     
     this.current_price.close = new_price;

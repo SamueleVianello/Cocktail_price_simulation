@@ -34,6 +34,7 @@ class Engine {
             this.current_time =(Date.now()-this.day_start)/1000;
             this.dt = this.current_time - this.prev_time;
         }
+        
 
 
 
@@ -103,7 +104,10 @@ class Engine {
 
         // 5. Final updates of engine ======================
         // update time
-        if (!this.real_time) this.current_time += this.dt;
+        if (!this.real_time) {
+            this.prev_time = this.current_time;
+            this.current_time =this.current_time+this.dt;
+        }
         // show clock
         this.showClock(width * 0.5, 0.88 * height);
     }
@@ -128,49 +132,6 @@ class Engine {
             }
         }
         return prices;
-    }
-
-    createEvent(label,comm_list=[],t=0, t_end=0, multipler=1){
-        if (t==0) t=this.current_time;
-
-        // TODO: modify list to use id instead of object
-        let temp_list = [];
-        for (let i = 0; i < comm_list.length; i++) {
-            temp_list.push( this.getCommodityById(comm_list[i]));
-            
-        }
-
-        comm_list = temp_list;
-
-        if(label == "crash"){
-            this.event_list.push(
-                new CrashEvent(t,
-                    t+60*30,
-                    0.3,
-                    comm_list
-                )
-            )
-        }
-
-        if(label == "fomo"){
-            this.event_list.push(
-                new FomoEvent(t,
-                    t+60*30,
-                    0.3,
-                    comm_list
-                )
-            )
-        }
-
-        if(label == "happy_vola"){
-            this.event_list.push(
-                new HappyVolatilityEvent(t,
-                    t_end,
-                    multipler,
-                    comm_list
-                )
-            )
-        }
     }
 
     sendOrders(orders){
@@ -273,7 +234,7 @@ class Engine {
       
         for(let i=0; i< n_cocktails; i++){
           let curr_price = this.cocktail_list[i].getPrice().toFixed(2);
-          let past_price = this.cocktail_list[i].getPrice(-15*60).toFixed(2);
+          let past_price = this.cocktail_list[i].getPrice(PRICE_DIFF_LAG).toFixed(2);
           let arrow = curr_price>past_price ? "⇧" : "⇩";
           let perc = ((curr_price/past_price -1)*100).toFixed(2);
       
@@ -331,6 +292,44 @@ class Engine {
             //this.cocktail_list[i].logDetails();
         }
         
+    }
+
+    createEvent(label,comm_list=[],t=0, t_end=0, value=null){
+        if (t==0) t=this.current_time;
+
+        // TODO: modify list to use id instead of object
+        let temp_list = [];
+        for (let i = 0; i < comm_list.length; i++) {
+            temp_list.push( this.getCommodityById(comm_list[i]));
+            
+        }
+
+        comm_list = temp_list;
+
+        if(label == "price"){
+            this.event_list.push(
+                new PriceEvent(t,
+                    t+60*30,
+                    value===null? 0:value,
+                    comm_list
+                )
+            )
+        }
+
+        if(label == "volatility"){
+            this.event_list.push(
+                new VolatilityEvent(t,
+                    t_end,
+                    value===null? 1:value,
+                    comm_list
+                )
+            )
+        }
+    }
+
+    importEvents(events){
+        
+
     }
 
     //=================== LOG FUNCTIONS =================================

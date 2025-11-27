@@ -12,8 +12,10 @@ let orders_per_hour = 150; //total orders in the bar per hour
 let N_customers = 60;
 
 let dt = 0; // seconds for simulation: if = 0 then real time
-let candle_time = 30; // seconds between every CANDLE update
+let candle_time = 5*60; // seconds between every CANDLE update
 let hours_to_simulate = 5;
+
+let PRICE_DIFF_LAG = -10*60; // seconds for price diff to show in menu
 
 let INCREASE_PERC = 0.02; // 0.02 means 2% increase per order
 let DECREASE_PERC = -0.004; // -0.004 means 0.4% decrease per MINUTE
@@ -29,6 +31,13 @@ let drink1;
 let entry_test;
 let register_test;
 let eng; 
+
+let gif_createImg;
+
+function preload() {
+  gif_createImg = createImg("gifs/stonks.gif");
+  gif_createImg.hide();
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -46,9 +55,9 @@ function setup() {
   //eng.logCocktails();
   
   // SAMPLE OF EVENTS
-  eng.createEvent("crash",['vodka'], start_time+60*20)
-  eng.createEvent("fomo",['gin'],start_time+60*30)
-  eng.createEvent("happy_vola",['gin','vodka'], start_time+60*60, start_time+60*60+60*10, 5.0)
+  eng.createEvent("price",['vodka'],"23:10", "21:20",0.3)
+  eng.createEvent("price",['gin'],"21:30","21:30",-0.3)
+  eng.createEvent("volatility",['gin','vodka','birrascura'], start_time+33*60, start_time+60*60+60*10, 5.0)
 
   // ----------------------------- REGISTER ------------------------------
   register_test = new Register(0, 0.*windowHeight, windowWidth*0.19, windowHeight, eng);
@@ -97,4 +106,10 @@ function draw() {
   if (frameCount ==  hours_to_simulate* (60 / dt) * 60) {
     noLoop();
   }
+}
+
+function keyPressed(){
+  gif_createImg.position(width/2, height/2);
+  gif_createImg.size(300,200);
+  gif_createImg.show();
 }

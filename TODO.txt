@@ -1,8 +1,15 @@
 currently working on:
-* aggiungere fattore moltiplicativo per eventi
-* creare evento volatility hour
+
+
+
+
+* aggiungere fattore moltiplicativo per eventi DONE
+* creare evento volatility hour DONE
+
 
 ######### EVENTI ################
+
+--> Aggiungere gif, titolo, descrizione per banner, orario
 
 # HAPPY HOUR VOLATILE (periodo in cui i salti sono 5x il normale)
 

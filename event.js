@@ -9,12 +9,14 @@ class Event {
     constructor( tp, start, end, commm_id){
         this.type = tp;
         
-        this.start_time = start;
-        this.end_time = end;
+        this.start_time = time_to_seconds(start);
+        this.end_time = time_to_seconds(end);;
 
         this.activated = false;
 
         this.commodity_id = commm_id;
+
+        this.gif = null;
     }
 
     isHappening(time){
@@ -23,14 +25,14 @@ class Event {
 }
 
 
-class CrashEvent extends Event{
-    constructor(start, end, crash_size, comm_list){
+class PriceEvent extends Event{
+    constructor(start, end, perc, comm_list){
         super("crash", start, end);
-        this.percentage = crash_size; //percentage of the crash 0.3
+        this.percentage = perc; //percentage of the crash 0.3
         this.applied = false;
         this.commodity_list = comm_list;
 
-        print("New Crash Event Created")
+        print("New Price Event Created")
     }
 
     applyEvent(){
@@ -46,29 +48,8 @@ class CrashEvent extends Event{
 }
 
 
-class FomoEvent extends Event{
-    constructor(start, end, crash_size, comm_list){
-        super("fomo", start, end);
-        this.percentage = crash_size; //percentage of the crash 0.3
-        this.applied = false;
-        this.commodity_list = comm_list;
-        print("New Fomo Event Created")
-    }
-    
-    applyEvent(){
-        for (let k of this.commodity_list) {
-            //console.log(""+k.id+" "+k.current_order.vol)
-            k.modifyPrice(-this.percentage)
-        }
-        this.applied = true;
-    }
 
-    unapplyEvent(){}
-}
-
-
-
-class HappyVolatilityEvent extends Event{
+class VolatilityEvent extends Event{
     constructor(start, end, multiplier, comm_list){
         super("happy_vola", start, end);
         this.multiplier = multiplier; //percentage of the crash 0.3
@@ -93,4 +74,16 @@ class HappyVolatilityEvent extends Event{
         this.applied = false;
     }
 
+}
+
+
+function time_to_seconds(t){
+    // if t is a string convert to seconds, else return t
+    if (typeof t == "string"){
+        let parts = t.replace(".",":").split(":");
+        let res = parseInt(parts[0])*60*60 + parseInt(parts[1])*60;
+        if (parts.length == 3) res += parseInt(parts[2]);
+        return res;
+    }
+    return t;
 }

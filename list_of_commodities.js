@@ -1,4 +1,5 @@
 let commodities = [
+    /*
     {   // GIN MARE
         id : 'gin',
         name : 'Gin Mare',
@@ -53,6 +54,79 @@ let commodities = [
         cost : 2.5,
         price_unit: 50, // in cl
     },
+    */
 
 
+    {
+    id:'gin',
+    name:'Gin base',
+    min_price:3.00,
+    start_price:7.50,
+    max_price:12.00,
+    price_unit:5.00,
+    cost:0.67,
+},
+{
+    id:'vodka',
+    name:'Vodka base',
+    min_price:3.00,
+    start_price:7.50,
+    max_price:12.00,
+    price_unit:5.00,
+    cost:0.80,
+},
+{
+    id:'rumbianco',
+    name:'Rum Bacardi',
+    min_price:3.00,
+    start_price:7.50,
+    max_price:12.00,
+    price_unit:5.00,
+    cost:0.84,
+},
+{
+    id:'tequila',
+    name:'Tequila base',
+    min_price:3.00,
+    start_price:7.50,
+    max_price:12.00,
+    price_unit:5.00,
+    cost:0.75,
+},
+{
+    id:'birrachiara',
+    name:'Birra Lager',
+    min_price:2.50,
+    start_price:3.75,
+    max_price:5.00,
+    price_unit:33.00,
+    cost:1.09,
+},
+{
+    id:'birraipa',
+    name:'Birra Ipa',
+    min_price:2.50,
+    start_price:3.75,
+    max_price:5.00,
+    price_unit:33.00,
+    cost:2.61,
+},
+{
+    id:'birrascura',
+    name:'Birra rossa',
+    min_price:2.50,
+    start_price:3.75,
+    max_price:5.00,
+    price_unit:33.00,
+    cost:2.10,
+},
+{
+    id:'rumscuro',
+    name:'Rum Pampero',
+    min_price:3.00,
+    start_price:7.50,
+    max_price:12.00,
+    price_unit:5.00,
+    cost:1.08,
+},
 ];

@@ -56,10 +56,10 @@ class Engine {
         for(let e of this.event_list){
             if ( e.isHappening(this.current_time)){
                 // print("Event is Happening")
-                if( !e.applied) e.applyEvent()
+                if( !e.applied) e.applyEvent(this.current_time)
             }
             else{
-                if(e.applied) e.unapplyEvent()
+                if(e.applied) e.unapplyEvent(this.current_time)
             }
         }
 
@@ -294,7 +294,8 @@ class Engine {
         
     }
 
-    createEvent(label,comm_list=[],t=0, t_end=0, value=null){
+    createEvent(label,id,name,comm_list=[],t=0, t_end=0, value=null,gif_path=null){
+        console.log(name)
         if (t==0) t=this.current_time;
 
         // TODO: modify list to use id instead of object
@@ -308,28 +309,40 @@ class Engine {
 
         if(label == "price"){
             this.event_list.push(
-                new PriceEvent(t,
-                    t+60*30,
+                new PriceEvent(label,
+                    id,
+                    name,
+                    t,
+                    t_end,
+                    comm_list,
                     value===null? 0:value,
-                    comm_list
+                    gif_path
                 )
             )
         }
 
         if(label == "volatility"){
             this.event_list.push(
-                new VolatilityEvent(t,
+                new VolatilityEvent(label,
+                    id,
+                    name,
+                    t,
                     t_end,
+                    comm_list,
                     value===null? 1:value,
-                    comm_list
+                    gif_path
                 )
             )
         }
     }
 
     importEvents(events){
-        
-
+        for(let i=0;i<events.length;i++  ){
+            let e = events[i];
+            console.log(e)
+            this.createEvent(e.type,e.id,e.name,e.commodities,e.start,e.end,e.value,e.gif)
+        }
+        console.log(this.event_list)
     }
 
     //=================== LOG FUNCTIONS =================================

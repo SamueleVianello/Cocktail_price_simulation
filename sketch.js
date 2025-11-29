@@ -11,7 +11,7 @@ let bg_color = "#e1e1e1";
 let orders_per_hour = 150; //total orders in the bar per hour
 let N_customers = 60;
 
-let dt = 0; // seconds for simulation: if = 0 then real time
+let dt = 5; // seconds for simulation: if = 0 then real time
 let candle_time = 5*60; // seconds between every CANDLE update
 let hours_to_simulate = 5;
 
@@ -32,12 +32,7 @@ let entry_test;
 let register_test;
 let eng; 
 
-let gif_createImg;
 
-function preload() {
-  gif_createImg = createImg("gifs/stonks.gif");
-  gif_createImg.hide();
-}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -53,11 +48,14 @@ function setup() {
   //eng.logCommodityList();
   eng.importCocktails(cocktails)
   //eng.logCocktails();
+  console.log(events)
+  eng.importEvents(events)
   
   // SAMPLE OF EVENTS
-  eng.createEvent("price",['vodka'],"23:10", "21:20",0.3)
-  eng.createEvent("price",['gin'],"21:30","21:30",-0.3)
-  eng.createEvent("volatility",['gin','vodka','birrascura'], start_time+33*60, start_time+60*60+60*10, 5.0)
+  //eng.createEvent("price","fomo","dazi PATATE",['vodka'],"21:20", "21:20",0.3)
+  //eng.createEvent("price","crash","spaccio GIN",['gin'],"21:30","21:30",-0.3)
+  //eng.createEvent("volatility","happyvola","Volatility Happy Hour",['gin','vodka','birrascura'], start_time+33*60, start_time+60*60+60*10, 5.0)
+
 
   // ----------------------------- REGISTER ------------------------------
   register_test = new Register(0, 0.*windowHeight, windowWidth*0.19, windowHeight, eng);
@@ -108,8 +106,4 @@ function draw() {
   }
 }
 
-function keyPressed(){
-  gif_createImg.position(width/2, height/2);
-  gif_createImg.size(300,200);
-  gif_createImg.show();
-}
+

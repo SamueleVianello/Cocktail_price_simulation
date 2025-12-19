@@ -11,13 +11,13 @@ let bg_color = "#e1e1e1";
 let orders_per_hour = 150; //total orders in the bar per hour
 let N_customers = 60;
 
-let dt = 5; // seconds for simulation: if = 0 then real time
+let dt = 0; // seconds for simulation: if = 0 then real time
 let candle_time = 5*60; // seconds between every CANDLE update
 let hours_to_simulate = 5;
 
 let PRICE_DIFF_LAG = -10*60; // seconds for price diff to show in menu
 
-let INCREASE_PERC = 0.02; // 0.02 means 2% increase per order
+let INCREASE_PERC = 0.10; // 0.02 means 2% increase per order
 let DECREASE_PERC = -0.004; // -0.004 means 0.4% decrease per MINUTE
 // ------------------------------------------------
 
@@ -51,30 +51,27 @@ function setup() {
   console.log(events)
   eng.importEvents(events)
   
-  // SAMPLE OF EVENTS
-  //eng.createEvent("price","fomo","dazi PATATE",['vodka'],"21:20", "21:20",0.3)
-  //eng.createEvent("price","crash","spaccio GIN",['gin'],"21:30","21:30",-0.3)
-  //eng.createEvent("volatility","happyvola","Volatility Happy Hour",['gin','vodka','birrascura'], start_time+33*60, start_time+60*60+60*10, 5.0)
-
-
-  // ----------------------------- REGISTER ------------------------------
-  register_test = new Register(0, 0.*windowHeight, windowWidth*0.19, windowHeight, eng);
-  register_test.create();
+  //// ----------------------------- REGISTER ------------------------------
+  //register_test = new Register(0, 0.*windowHeight, windowWidth*0.19, windowHeight, eng);
+  //register_test.create();
 
   // ----------------------------- SIMULATION -----------------------------
-  // create simulation
-  sim = new Simulation(dt, candle_time); //time in seconds
-  sim.global_time = eng.global_time; // opening hour in seconds
-  eng.addSimulation(sim);
+  // only if dt!=0 (not real time)
+  if (dt!=0){
+    // create simulation
+    sim = new Simulation(dt, candle_time); //time in seconds
+    sim.global_time = eng.global_time; // opening hour in seconds
+    eng.addSimulation(sim);
 
-  // create all customers and import them
-  for (let i = 0; i < N_customers; i++) {
-    let fav_cocktail_id = sampleElement(eng.cocktail_list.map(obj => obj.id));
-    //console.log(fav_cocktail_id)
-    sim.addCustomer(
-      new Customer(orders_per_hour / N_customers, fav_cocktail_id, sim.dt),
-      eng.cocktail_list
-    );
+    // create all customers and import them
+    for (let i = 0; i < N_customers; i++) {
+      let fav_cocktail_id = sampleElement(eng.cocktail_list.map(obj => obj.id));
+      //console.log(fav_cocktail_id)
+      sim.addCustomer(
+        new Customer(orders_per_hour / N_customers, fav_cocktail_id, sim.dt),
+        eng.cocktail_list
+      );
+    }
   }
   //------------------------------------------------
 }

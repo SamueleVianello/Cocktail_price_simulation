@@ -68,6 +68,7 @@ class Engine {
         // *********  RICEVI ORDINI CONFERMATI e PAGATI ********
         //getOrders();
 
+        
         // *** ESEMPIO ORDINE
         let orders = [{
                 id: 'vodkalemon01',
@@ -82,8 +83,10 @@ class Engine {
         // sample orders
         if (this.sim != null) orders = this.sim.evolve();
         // console.log("Processing orders:", orders);
-
+        
+        orders = []
         this.sendOrders(orders);
+        
         
         
         // Log commodity states before price update
@@ -272,11 +275,11 @@ class Engine {
                                                     c.cost,
                                                     this.candles_dt))
 
-            
-            let n_vert = (floor(comm.length/2+0.8));
-            let w = width*0.55*0.5;
+            let n_cols = 3;
+            let n_vert = (floor(comm.length/n_cols+0.8));
+            let w = width*0.75/n_cols;
             let h = height*0.8 / n_vert;
-            let x1 = (i<comm.length/2)? 0.2*width: w + 0.2*width;
+            let x1 = floor(i/n_vert) * w ;
             let y1 = h*((i)%n_vert);
             this.commodity_list[i].price_process.setBox(x1,y1,w,h);
             

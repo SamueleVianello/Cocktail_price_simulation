@@ -44,7 +44,7 @@ class PriceEvent extends Event{
         }
         //initialize gif 
         this.gif_handler.duration = this.end_time-this.start_time;
-        this.gif_handler.activate(time);
+        this.gif_handler.activate(time,this.commodity_list);
         this.applied = true;
     }
 
@@ -70,7 +70,7 @@ class VolatilityEvent extends Event{
         }
         //initialize gif 
         this.gif_handler.duration = this.end_time-this.start_time;
-        this.gif_handler.activate(time);
+        this.gif_handler.activate(time,this.commodity_list);
         this.applied = true;
     }
 
@@ -103,6 +103,7 @@ function time_to_seconds(t){
 class GifHandler {
     constructor(path, start_time, duration= 10 ){
         this.path = path;
+        //TODO: create array of gifs for events affecting multiple commodities
         this.gif = createImg(path,"");
         this.gif.hide(); //hides the gif's html element
         
@@ -128,6 +129,28 @@ class GifHandler {
         this.active= true;
         this.start_time = time;
         this.gif.show();
+    }
+
+    activate(time, commodity_list){
+        for(let commo of commodity_list){
+            console.log(commodity_list)
+
+            let gif_h = commo.price_process.box.h;
+            let gif_w = gif_h *this.gif.width / this.gif.height;
+
+            if (gif_w> commo.price_process.box.h/2){
+                gif_w = commo.price_process.box.h/2;
+                gif_h = gif_w *this.gif.height / this.gif.width;
+            }
+
+            this.gif.size(gif_w,gif_h)
+            this.gif.position(commo.price_process.box.x1, commo.price_process.box.y1);
+            this.active= true;
+            this.start_time = time;
+            this.gif.show();
+
+        }
+        
     }
 
     deactivate(){

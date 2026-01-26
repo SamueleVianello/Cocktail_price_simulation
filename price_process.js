@@ -1,5 +1,9 @@
-let my_red = "#dd0000";
-let my_green = "#00bb00";
+const my_red = "#dd0000";
+const my_green = "#00bb00";
+
+// Configuration parameters (in milliseconds)
+const SAVE_INTERVAL = 0.5* 60 * 1000;  // 5 minutes
+const MAX_SNAPSHOT_AGE = 12 * 60 * 60 * 1000;  // 12 hours
 
 function clamp(x, m, M) {
   return min(max(x, m), M);
@@ -222,7 +226,111 @@ class PriceProcess {
     text("tot orders: " + tot_orders, this.box.w * 0.5, 0.18 * this.box.h*TEXT_SCALE);
     pop();
   }
+
+    // ************************ managing snapshots ************************
+    // Save snapshot to localStorage
+  saveSnapshot() {
+    // Find which snapshot is older (or doesn't exist)
+    let targetPointer = 0;
+    
+    const timestamp0 = localStorage.getItem(`price_history_${this.asset_id}_snapshot_0_timestamp`);
+    const timestamp1 = localStorage.getItem(`price_history_${this.asset_id}_snapshot_1_timestamp`);
+    
+    if (timestamp0 && timestamp1) {
+      // Both exist, overwrite the older one
+      targetPointer = timestamp0 < timestamp1 ? 0 : 1;
+    } else if (timestamp1) {
+      // Only 1 exists, use 0
+      targetPointer = 0;
+    } else {
+      // Neither or only 0 exists, use 1
+      targetPointer = timestamp0 ? 1 : 0;
+    }
+    
+    // Save to target slot
+    const timestamp = generateTimestamp();
+    localStorage.setItem(`price_history_${this.asset_id}_snapshot_${targetPointer}`, JSON.stringify(this.history));
+    localStorage.setItem(`price_history_${this.asset_id}_snapshot_${targetPointer}_timestamp`, timestamp);
+    
+    console.log(`Snapshot ${targetPointer} saved at ${timestamp}`);
+  }
+
+  // Load most recent valid snapshot (< 12 hours old)
+  loadSnapshot(maxAge = MAX_SNAPSHOT_AGE) {
+    const now = new Date();
+    let validSnapshots = [];
+    
+    // Check both snapshots
+    for (let i = 0; i < 2; i++) {
+      const dataKey = `price_history_${this.asset_id}_snapshot_${i}`;
+      const timestampKey = `price_history_${this.asset_id}_snapshot_${i}_timestamp`;
+      
+      const data = localStorage.getItem(dataKey);
+      const timestampStr = localStorage.getItem(timestampKey);
+      
+      if (data && timestampStr) {
+        const snapshotTime = parseTimestamp(timestampStr);
+        const age = now - snapshotTime;
+        
+        if (age < maxAge) {
+          validSnapshots.push({
+            index: i,
+            data: data,
+            timestamp: timestampStr,
+            age: age
+          });
+          console.log(`Snapshot ${i} found: ${timestampStr} (age: ${Math.round(age / 1000 / 60)} minutes)`);
+        } else {
+          console.log(`Snapshot ${i} too old: ${timestampStr} (age: ${Math.round(age / 1000 / 60)} minutes)`);
+        }
+      }
+    }
+    
+    // Load the most recent valid snapshot
+    if (validSnapshots.length > 0) {
+      // Sort by age (smallest = most recent)
+      validSnapshots.sort((a, b) => a.age - b.age);
+      const mostRecent = validSnapshots[0];
+      
+      this.history = JSON.parse(mostRecent.data);
+      
+      // Restore current_price from last values in history
+      if (this.history.close.length > 0) {
+        const lastIndex = this.history.close.length - 1;
+        this.current_price = {
+          timestamp: this.history.timestamp[lastIndex],
+          open: this.history.close[lastIndex],
+          close: this.history.close[lastIndex],
+          maximum: this.history.close[lastIndex],
+          minimum: this.history.close[lastIndex],
+          vol: 0
+        };
+        console.log(`Current price restored: ${this.current_price.close}`);
+      }
+      
+      console.log(`Success! Loaded snapshot ${mostRecent.index} from ${mostRecent.timestamp}`);
+      return true;
+    } else {
+      console.log('No valid snapshots found. Starting fresh.');
+      return false;
+    }
+  }
+
+  startAutoSave(interval = SAVE_INTERVAL) {
+    // Save immediately on start
+    this.saveSnapshot();
+    
+    // Then save every interval
+    setInterval(() => {
+      this.saveSnapshot();
+    }, interval);
+    
+    console.log(`Auto-save started: every ${interval / 1000 / 60} minutes`);
+  }
 }
+
+
+////////////////////////////////////////////////////////////
 
 function drawCandle(
   curr_open,
@@ -301,4 +409,38 @@ function drawCandle(
     )
   }
   pop();
+}
+
+
+
+
+
+//// ####################################################
+
+
+
+
+// Helper function to generate timestamp string "yyyymmdd_hhmmss"
+function generateTimestamp() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+  return `${year}${month}${day}_${hours}${minutes}${seconds}`;
+}
+
+// Helper function to parse timestamp string back to Date object
+function parseTimestamp(timestampStr) {
+  const year = parseInt(timestampStr.substr(0, 4));
+  const month = parseInt(timestampStr.substr(4, 2)) - 1;
+  const day = parseInt(timestampStr.substr(6, 2));
+  const hours = parseInt(timestampStr.substr(9, 2));
+  const minutes = parseInt(timestampStr.substr(11, 2));
+  const seconds = parseInt(timestampStr.substr(13, 2));
+  
+  return new Date(year, month, day, hours, minutes, seconds);
 }

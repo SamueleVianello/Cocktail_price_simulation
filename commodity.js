@@ -26,6 +26,9 @@ class Commodity {
       this.decrease_perc,
       this.dt
     );
+    this.price_process.loadSnapshot();
+    this.price_process.startAutoSave();
+
 
     this.order_history = {
       timestamp: [],

@@ -1,7 +1,8 @@
 class Cocktail {
-  constructor(id, name, bases, other) {
+  constructor(id, name, ticker, bases, other) {
     this.id = id;
     this.name = name;
+    this.ticker = ticker;
     //this.base_id = base_id; // base can be an array of commodity (spirits)
     this.bases = bases;
     this.other = other;

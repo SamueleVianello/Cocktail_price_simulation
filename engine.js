@@ -216,44 +216,55 @@ class Engine {
     showMenu(x1,y1,x2,y2){
         push();
         rectMode(CORNERS);
-        //fill(250,120,50);
         stroke(0)
         rect(x1,y1,x2,y2)
+        
         let n_cocktails = this.cocktail_list.length;
         let tot_rows = 1.5*n_cocktails + 4;
         let dh = clamp((y2-y1)/tot_rows, 5, 20);
-      
+        
+        // Define column positions
+        let col1 = x1 + dh;           // Ticker column
+        let col2 = x1 + 0.25*(x2-x1); // Cocktail name column
+        let col3 = x1 + 0.6*(x2-x1);  // Current price column
+        let col4 = x2 - dh;           // Past/change column
+    
         textSize(dh);
-        textAlign(LEFT)
         fill(0);
         noStroke();
-      
+    
+        // Headers
         textAlign(LEFT);
-        text('COCKTAIL', dh+x1, 2*dh )
+        text('TICKER', col1, 2*dh);
+        text('COCKTAIL', col2, 2*dh);
         textAlign(CENTER);
-        text('         CURRENT', 0.5*(x1+x2), 2*dh)
+        text('CURRENT', col3, 2*dh);
         textAlign(RIGHT);
-        text('PAST', x2-dh,2*dh)
-      
+        text('PAST', col4, 2*dh);
+    
+        // Cocktail rows
         for(let i=0; i< n_cocktails; i++){
-          let curr_price = this.cocktail_list[i].getPrice().toFixed(2);
-          let past_price = this.cocktail_list[i].getPrice(PRICE_DIFF_LAG).toFixed(2);
-          let arrow = curr_price>past_price ? "⇧" : "⇩";
-          let perc = ((curr_price/past_price -1)*100).toFixed(2);
-      
-          perc = (past_price ==0)? "-": perc+'%';
-      
-          fill(0)
-          textAlign(LEFT);
-          text(this.cocktail_list[i].name, dh+x1, 4*dh+i*1.5*dh ) //name
-          textAlign(CENTER);
-          text('         '+curr_price, 0.5*(x1+x2), 4*dh+i*1.5*dh) //current price
-      
-          fill(curr_price<past_price ? '#0011bb':my_red);
-          textAlign(RIGHT);
-          text(arrow+perc, x2-dh,4*dh+i*1.5*dh) // past price
+        let row_y = 4*dh + i*1.5*dh;
+        let curr_price = this.cocktail_list[i].getPrice().toFixed(2);
+        let past_price = this.cocktail_list[i].getPrice(PRICE_DIFF_LAG).toFixed(2);
+        let arrow = curr_price>past_price ? "⇧" : "⇩";
+        let perc = ((curr_price/past_price -1)*100).toFixed(2);
+    
+        perc = (past_price ==0)? "-": perc+'%';
+    
+        fill(0);
+        textAlign(LEFT);
+        text(this.cocktail_list[i].ticker, col1, row_y);
+        text(this.cocktail_list[i].name, col2, row_y);
+        
+        textAlign(CENTER);
+        text(curr_price, col3, row_y);
+    
+        fill(curr_price<past_price ? '#0011bb':my_red);
+        textAlign(RIGHT);
+        text(arrow+perc, col4, row_y);
         }
-      
+    
         pop();
     }
 
@@ -290,7 +301,7 @@ class Engine {
         // cocktails is an array of json objects
         for(let i=0;i<cocktails.length;i++  ){
             let c = cocktails[i];
-            this.cocktail_list.push(new Cocktail(c.id, c.name, c.bases, c.other));
+            this.cocktail_list.push(new Cocktail(c.id, c.name, c.ticker, c.bases, c.other));
             this.cocktail_list[i].importBases(this.commodity_list);
             //this.cocktail_list[i].logDetails();
         }
